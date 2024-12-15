@@ -114,8 +114,13 @@ public final class GenesisState {
       final DataStorageConfiguration dataStorageConfiguration,
       final GenesisConfigFile genesisConfigFile,
       final ProtocolSchedule protocolSchedule) {
-    final var genesisStateRoot =
-        calculateGenesisStateRoot(dataStorageConfiguration, genesisConfigFile);
+    // for optimism mainnet, it will modify genesis state root.
+    final Hash genesisStateRoot;
+    if (!genesisConfigFile.getStateHash().isEmpty()) {
+      genesisStateRoot = Hash.fromHexStringLenient(genesisConfigFile.getStateHash());
+    } else {
+      genesisStateRoot = calculateGenesisStateRoot(dataStorageConfiguration, genesisConfigFile);
+    }
     final Block block =
         new Block(
             buildHeader(genesisConfigFile, genesisStateRoot, protocolSchedule),
