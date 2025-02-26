@@ -20,7 +20,7 @@ import org.hyperledger.besu.ethereum.core.TransactionReceipt;
 import org.hyperledger.besu.plugin.data.TransactionSelectionResult;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,8 +36,7 @@ public class TransactionSelectionResults {
   private static final Logger LOG = LoggerFactory.getLogger(TransactionSelectionResults.class);
 
   private final List<Transaction> selectedTransactions = Lists.newArrayList();
-  private final Map<TransactionType, List<Transaction>> transactionsByType =
-      new EnumMap<>(TransactionType.class);
+  private final Map<TransactionType, List<Transaction>> transactionsByType = new HashMap<>();
   private final List<TransactionReceipt> receipts = Lists.newArrayList();
 
   /**

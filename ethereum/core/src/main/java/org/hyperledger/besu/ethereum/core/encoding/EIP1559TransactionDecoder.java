@@ -18,7 +18,7 @@ import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.rlp.RLPInput;
@@ -41,7 +41,7 @@ public class EIP1559TransactionDecoder {
     final BigInteger chainId = input.readBigIntegerScalar();
     final Transaction.Builder builder =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(chainId)
             .nonce(input.readLongScalar())
             .maxPriorityFeePerGas(Wei.of(input.readUInt256Scalar()))

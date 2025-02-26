@@ -17,7 +17,7 @@ package org.hyperledger.besu.ethereum.api.jsonrpc.methods.fork.frontier;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.ethereum.api.jsonrpc.BlockchainImporter;
 import org.hyperledger.besu.ethereum.api.jsonrpc.JsonRpcResponseKey;
 import org.hyperledger.besu.ethereum.api.jsonrpc.JsonRpcResponseUtils;
@@ -241,7 +241,7 @@ public class EthGetBlockByNumberIntegrationTest {
     final List<TransactionResult> transactions =
         responseUtils.transactions(
             responseUtils.transaction(
-                TransactionType.FRONTIER,
+                MainnetTransactionType.FRONTIER,
                 "0x71d59849ddd98543bdfbe8548f5eed559b07b8aaf196369f39134500eab68e53",
                 "0x20",
                 null,
@@ -375,7 +375,7 @@ public class EthGetBlockByNumberIntegrationTest {
     final List<TransactionResult> transactions =
         responseUtils.transactions(
             responseUtils.transaction(
-                TransactionType.FRONTIER,
+                MainnetTransactionType.FRONTIER,
                 "0x609427ccfeae6d2a930927c9a29a0a3077cac7e4b5826159586b10e25770eef9",
                 "0x5",
                 null,

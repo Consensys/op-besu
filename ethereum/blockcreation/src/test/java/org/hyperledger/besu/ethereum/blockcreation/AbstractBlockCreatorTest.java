@@ -34,8 +34,8 @@ import org.hyperledger.besu.datatypes.BlobGas;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.GWei;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.RequestType;
-import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.ProtocolContext;
 import org.hyperledger.besu.ethereum.blockcreation.BlockCreator.BlockCreationResult;
@@ -238,7 +238,7 @@ abstract class AbstractBlockCreatorTest {
     TransactionTestFixture ttf = new TransactionTestFixture();
     Transaction fullOfBlobs =
         ttf.to(Optional.of(Address.ZERO))
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(Optional.of(BigInteger.valueOf(42)))
             .gasLimit(21000)
             .maxFeePerGas(Optional.of(Wei.of(15)))

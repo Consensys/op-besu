@@ -14,7 +14,7 @@
  */
 package org.hyperledger.besu.ethereum.eth.transactions.sorter;
 
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.core.TransactionTestFixture;
@@ -44,7 +44,7 @@ public class BaseFeePendingTransactionsTest extends AbstractPendingTransactionsT
   protected Transaction createTransaction(final long transactionNumber) {
     var tx = new TransactionTestFixture().value(Wei.of(transactionNumber)).nonce(transactionNumber);
     if (randomizeTxType.nextBoolean()) {
-      tx.type(TransactionType.EIP1559)
+      tx.type(MainnetTransactionType.EIP1559)
           .maxFeePerGas(Optional.of(Wei.of(5000L)))
           .maxPriorityFeePerGas(Optional.of(Wei.of(50L)));
     }

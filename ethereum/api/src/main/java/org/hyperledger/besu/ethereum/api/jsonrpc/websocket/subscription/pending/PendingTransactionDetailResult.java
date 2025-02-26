@@ -14,6 +14,7 @@
  */
 package org.hyperledger.besu.ethereum.api.jsonrpc.websocket.subscription.pending;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.api.jsonrpc.internal.results.JsonRpcResult;
 import org.hyperledger.besu.ethereum.api.jsonrpc.internal.results.Quantity;
@@ -63,7 +64,7 @@ public class PendingTransactionDetailResult implements JsonRpcResult {
     this.input = tx.getPayload().toString();
     this.nonce = Quantity.create(tx.getNonce());
     this.to = tx.getTo().map(Bytes::toHexString).orElse(null);
-    if (transactionType == TransactionType.FRONTIER) {
+    if (transactionType == MainnetTransactionType.FRONTIER) {
       this.type = Quantity.create(0);
       this.yParity = null;
       this.v = Quantity.create(tx.getV());
@@ -71,8 +72,8 @@ public class PendingTransactionDetailResult implements JsonRpcResult {
       this.type = Quantity.create(transactionType.getSerializedType());
       this.yParity = Quantity.create(tx.getYParity());
       this.v =
-          (transactionType == TransactionType.ACCESS_LIST
-                  || transactionType == TransactionType.EIP1559)
+          (transactionType == MainnetTransactionType.ACCESS_LIST
+                  || transactionType == MainnetTransactionType.EIP1559)
               ? Quantity.create(tx.getYParity())
               : null;
     }

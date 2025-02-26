@@ -16,6 +16,7 @@ package org.hyperledger.besu.tests.acceptance.dsl.transaction.account;
 
 import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.tests.acceptance.dsl.account.Account;
 import org.hyperledger.besu.tests.acceptance.dsl.blockchain.Amount;
@@ -124,7 +125,7 @@ public class TransferTransaction implements Transaction<Hash> {
   }
 
   private RawTransaction createRawTransaction() {
-    return transactionType == TransactionType.FRONTIER
+    return transactionType == MainnetTransactionType.FRONTIER
         ? createFrontierTransaction()
         : create1559Transaction(chainId.orElseThrow());
   }

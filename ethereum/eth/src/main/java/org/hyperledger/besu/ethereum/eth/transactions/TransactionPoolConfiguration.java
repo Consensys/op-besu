@@ -15,6 +15,7 @@
 package org.hyperledger.besu.ethereum.eth.transactions;
 
 import org.hyperledger.besu.datatypes.Address;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.plugin.services.TransactionPoolValidatorService;
@@ -25,7 +26,6 @@ import org.hyperledger.besu.util.number.Percentage;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,8 +74,8 @@ public interface TransactionPoolConfiguration {
   File DEFAULT_SAVE_FILE = new File(DEFAULT_SAVE_FILE_NAME);
   long DEFAULT_PENDING_TRANSACTIONS_LAYER_MAX_CAPACITY_BYTES = 12_500_000L;
   int DEFAULT_MAX_PRIORITIZED_TRANSACTIONS = 2000;
-  EnumMap<TransactionType, Integer> DEFAULT_MAX_PRIORITIZED_TRANSACTIONS_BY_TYPE =
-      new EnumMap<>(Map.of(TransactionType.BLOB, 6));
+  Map<TransactionType, Integer> DEFAULT_MAX_PRIORITIZED_TRANSACTIONS_BY_TYPE =
+      Map.of(MainnetTransactionType.BLOB, 6);
   int DEFAULT_MAX_FUTURE_BY_SENDER = 200;
   Implementation DEFAULT_TX_POOL_IMPLEMENTATION = Implementation.LAYERED;
   Set<Address> DEFAULT_PRIORITY_SENDERS = Set.of();

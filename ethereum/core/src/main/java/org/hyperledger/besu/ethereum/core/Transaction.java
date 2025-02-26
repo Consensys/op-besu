@@ -32,6 +32,7 @@ import org.hyperledger.besu.datatypes.CodeDelegation;
 import org.hyperledger.besu.datatypes.Hash;
 import org.hyperledger.besu.datatypes.KZGCommitment;
 import org.hyperledger.besu.datatypes.KZGProof;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Sha256Hash;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
@@ -163,7 +164,7 @@ public class Transaction
    *     <p>The {@code chainId} must be greater than 0 to be applied to a specific chain; otherwise
    *     it will default to any chain.
    */
-  private Transaction(
+  Transaction(
       final boolean forCopy,
       final TransactionType transactionType,
       final long nonce,
@@ -197,7 +198,7 @@ public class Transaction
             "Must not specify access list for transaction not supporting it");
       }
 
-      if (Objects.equals(transactionType, TransactionType.ACCESS_LIST)) {
+      if (transactionType.isAccessList()) {
         checkArgument(
             maybeAccessList.isPresent(), "Must specify access list for access list transaction");
       }
@@ -507,7 +508,7 @@ public class Transaction
 
   @Override
   public BigInteger getV() {
-    if (transactionType != null && transactionType != TransactionType.FRONTIER) {
+    if (transactionType != null && transactionType.isFrontier()) {
       // EIP-2718 typed transaction, use yParity:
       return null;
     } else {
@@ -520,7 +521,7 @@ public class Transaction
 
   @Override
   public BigInteger getYParity() {
-    if (transactionType != null && transactionType != TransactionType.FRONTIER) {
+    if (transactionType != null && transactionType.isFrontier()) {
       // EIP-2718 typed transaction, return yParity:
       return BigInteger.valueOf(signature.getRecId());
     } else {
@@ -719,62 +720,70 @@ public class Transaction
     if (transactionType.requiresChainId()) {
       checkArgument(chainId.isPresent(), "Transaction type %s requires chainId", transactionType);
     }
-    final Bytes preimage =
-        switch (transactionType) {
-          case FRONTIER -> frontierPreimage(nonce, gasPrice, gasLimit, to, value, payload, chainId);
-          case EIP1559 ->
-              eip1559Preimage(
-                  nonce,
-                  maxPriorityFeePerGas,
-                  maxFeePerGas,
-                  gasLimit,
-                  to,
-                  value,
-                  payload,
-                  chainId,
-                  accessList);
-          case BLOB ->
-              blobPreimage(
-                  nonce,
-                  maxPriorityFeePerGas,
-                  maxFeePerGas,
-                  maxFeePerBlobGas,
-                  gasLimit,
-                  to,
-                  value,
-                  payload,
-                  chainId,
-                  accessList,
-                  versionedHashes);
-          case ACCESS_LIST ->
-              accessListPreimage(
-                  nonce,
-                  gasPrice,
-                  gasLimit,
-                  to,
-                  value,
-                  payload,
-                  accessList.orElseThrow(
-                      () ->
-                          new IllegalStateException(
-                              "Developer error: the transaction should be guaranteed to have an access list here")),
-                  chainId);
-          case DELEGATE_CODE ->
-              codeDelegationPreimage(
-                  nonce,
-                  maxPriorityFeePerGas,
-                  maxFeePerGas,
-                  gasLimit,
-                  to,
-                  value,
-                  payload,
-                  chainId,
-                  accessList,
-                  codeDelegationList.orElseThrow(
-                      () ->
-                          new IllegalStateException(
-                              "Developer error: the transaction should be guaranteed to have a code delegations here")));
-        };
+    final Bytes preimage;
+    if (transactionType.getTypeValue() == MainnetTransactionType.FRONTIER.getTypeValue()) {
+      preimage = frontierPreimage(nonce, gasPrice, gasLimit, to, value, payload, chainId);
+    } else if (transactionType.getTypeValue() == MainnetTransactionType.EIP1559.getTypeValue()) {
+      preimage =
+          eip1559Preimage(
+              nonce,
+              maxPriorityFeePerGas,
+              maxFeePerGas,
+              gasLimit,
+              to,
+              value,
+              payload,
+              chainId,
+              accessList);
+    } else if (transactionType.getTypeValue() == MainnetTransactionType.BLOB.getTypeValue()) {
+      preimage =
+          blobPreimage(
+              nonce,
+              maxPriorityFeePerGas,
+              maxFeePerGas,
+              maxFeePerBlobGas,
+              gasLimit,
+              to,
+              value,
+              payload,
+              chainId,
+              accessList,
+              versionedHashes);
+    } else if (transactionType.getTypeValue()
+        == MainnetTransactionType.ACCESS_LIST.getTypeValue()) {
+      preimage =
+          accessListPreimage(
+              nonce,
+              gasPrice,
+              gasLimit,
+              to,
+              value,
+              payload,
+              accessList.orElseThrow(
+                  () ->
+                      new IllegalStateException(
+                          "Developer error: the transaction should be guaranteed to have an access list here")),
+              chainId);
+    } else if (transactionType.getTypeValue()
+        == MainnetTransactionType.DELEGATE_CODE.getTypeValue()) {
+      preimage =
+          codeDelegationPreimage(
+              nonce,
+              maxPriorityFeePerGas,
+              maxFeePerGas,
+              gasLimit,
+              to,
+              value,
+              payload,
+              chainId,
+              accessList,
+              codeDelegationList.orElseThrow(
+                  () ->
+                      new IllegalStateException(
+                          "Developer error: the transaction should be guaranteed to have a code delegations here")));
+    } else {
+      throw new IllegalStateException("not supported transaction type: " + transactionType);
+    }
     return keccak256(preimage);
   }
 
@@ -831,7 +840,7 @@ public class Transaction
                   rlpOutput);
               rlpOutput.endList();
             });
-    return Bytes.concatenate(Bytes.of(TransactionType.EIP1559.getSerializedType()), encoded);
+    return Bytes.concatenate(Bytes.of(MainnetTransactionType.EIP1559.getSerializedType()), encoded);
   }
 
   private static void eip1559PreimageFields(
@@ -888,7 +897,7 @@ public class Transaction
               BlobTransactionEncoder.writeBlobVersionedHashes(rlpOutput, versionedHashes);
               rlpOutput.endList();
             });
-    return Bytes.concatenate(Bytes.of(TransactionType.BLOB.getSerializedType()), encoded);
+    return Bytes.concatenate(Bytes.of(MainnetTransactionType.BLOB.getSerializedType()), encoded);
   }
 
   private static Bytes accessListPreimage(
@@ -908,7 +917,8 @@ public class Transaction
                   chainId, nonce, gasPrice, gasLimit, to, value, payload, accessList, rlpOutput);
               rlpOutput.endList();
             });
-    return Bytes.concatenate(Bytes.of(TransactionType.ACCESS_LIST.getSerializedType()), encode);
+    return Bytes.concatenate(
+        Bytes.of(MainnetTransactionType.ACCESS_LIST.getSerializedType()), encode);
   }
 
   private static Bytes codeDelegationPreimage(
@@ -941,7 +951,8 @@ public class Transaction
                   authorizationList, rlpOutput);
               rlpOutput.endList();
             });
-    return Bytes.concatenate(Bytes.of(TransactionType.DELEGATE_CODE.getSerializedType()), encoded);
+    return Bytes.concatenate(
+        Bytes.of(MainnetTransactionType.DELEGATE_CODE.getSerializedType()), encoded);
   }
 
   @Override
@@ -1008,7 +1019,7 @@ public class Transaction
     sb.append("value=").append(getValue()).append(", ");
     sb.append("sig=").append(getSignature()).append(", ");
     if (chainId.isPresent()) sb.append("chainId=").append(getChainId().get()).append(", ");
-    if (transactionType.equals(TransactionType.ACCESS_LIST)) {
+    if (transactionType.equals(MainnetTransactionType.ACCESS_LIST)) {
       sb.append("accessList=").append(maybeAccessList).append(", ");
     }
     if (versionedHashes.isPresent()) {
@@ -1288,15 +1299,15 @@ public class Transaction
 
     public Builder guessType() {
       if (versionedHashes != null && !versionedHashes.isEmpty()) {
-        transactionType = TransactionType.BLOB;
+        transactionType = MainnetTransactionType.BLOB;
       } else if (maxPriorityFeePerGas != null || maxFeePerGas != null) {
-        transactionType = TransactionType.EIP1559;
+        transactionType = MainnetTransactionType.EIP1559;
       } else if (accessList.isPresent()) {
-        transactionType = TransactionType.ACCESS_LIST;
+        transactionType = MainnetTransactionType.ACCESS_LIST;
       } else if (codeDelegationAuthorizations.isPresent()) {
-        transactionType = TransactionType.DELEGATE_CODE;
+        transactionType = MainnetTransactionType.DELEGATE_CODE;
       } else {
-        transactionType = TransactionType.FRONTIER;
+        transactionType = MainnetTransactionType.FRONTIER;
       }
       return this;
     }

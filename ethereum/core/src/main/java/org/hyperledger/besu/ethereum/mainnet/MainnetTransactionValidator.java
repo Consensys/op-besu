@@ -23,6 +23,7 @@ import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.CodeDelegation;
 import org.hyperledger.besu.datatypes.Hash;
 import org.hyperledger.besu.datatypes.KZGCommitment;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -135,7 +136,7 @@ public class MainnetTransactionValidator implements TransactionValidator {
               transaction.getPayload().size(), maxInitcodeSize));
     }
 
-    if (transactionType == TransactionType.DELEGATE_CODE) {
+    if (transactionType == MainnetTransactionType.DELEGATE_CODE) {
       ValidationResult<TransactionInvalidReason> codeDelegationValidation =
           validateCodeDelegation(transaction);
       if (!codeDelegationValidation.isValid()) {

@@ -17,7 +17,7 @@ package org.hyperledger.besu.ethereum.api.jsonrpc.methods.fork.frontier;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.ethereum.api.jsonrpc.BlockchainImporter;
 import org.hyperledger.besu.ethereum.api.jsonrpc.JsonRpcResponseKey;
 import org.hyperledger.besu.ethereum.api.jsonrpc.JsonRpcResponseUtils;
@@ -123,7 +123,7 @@ public class EthGetBlockByHashIntegrationTest {
     final List<TransactionResult> transactions =
         responseUtils.transactions(
             responseUtils.transaction(
-                TransactionType.FRONTIER,
+                MainnetTransactionType.FRONTIER,
                 "0x10aaf14a53caf27552325374429d3558398a36d3682ede6603c2c6511896e9f9",
                 "0x1",
                 null,

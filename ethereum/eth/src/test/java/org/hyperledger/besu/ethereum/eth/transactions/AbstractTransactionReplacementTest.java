@@ -17,7 +17,7 @@ package org.hyperledger.besu.ethereum.eth.transactions;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
@@ -31,7 +31,7 @@ public class AbstractTransactionReplacementTest {
     final Transaction transaction =
         Transaction.builder()
             .chainId(BigInteger.ZERO)
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .gasPrice(Wei.of(price))
             .build();
     when(pendingTransaction.getTransaction()).thenReturn(transaction);
@@ -45,7 +45,7 @@ public class AbstractTransactionReplacementTest {
     final Transaction transaction =
         Transaction.builder()
             .chainId(BigInteger.ZERO)
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxPriorityFeePerGas(Wei.of(maxPriorityFeePerGas))
             .maxFeePerGas(Wei.of(maxFeePerGas))
             .build();
@@ -59,7 +59,7 @@ public class AbstractTransactionReplacementTest {
     final Transaction transaction =
         Transaction.builder()
             .chainId(BigInteger.ZERO)
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .maxPriorityFeePerGas(Wei.of(maxPriorityFeePerGas))
             .maxFeePerGas(Wei.of(maxFeePerGas))
             .maxFeePerBlobGas(Wei.of(maxFeePerBlobGas))

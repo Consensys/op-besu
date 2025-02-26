@@ -20,7 +20,7 @@ import static org.hyperledger.besu.ethereum.mainnet.feemarket.ExcessBlobGasCalcu
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobGas;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.ProtocolContext;
 import org.hyperledger.besu.ethereum.blockcreation.txselection.BlockTransactionSelector;
@@ -341,7 +341,7 @@ public abstract class AbstractBlockCreator implements AsyncBlockCreator {
     if (newProtocolSpec.getFeeMarket().implementsDataFee()) {
       final var gasCalculator = newProtocolSpec.getGasCalculator();
       final int newBlobsCount =
-          transactionResults.getTransactionsByType(TransactionType.BLOB).stream()
+          transactionResults.getTransactionsByType(MainnetTransactionType.BLOB).stream()
               .map(tx -> tx.getVersionedHashes().orElseThrow())
               .mapToInt(List::size)
               .sum();

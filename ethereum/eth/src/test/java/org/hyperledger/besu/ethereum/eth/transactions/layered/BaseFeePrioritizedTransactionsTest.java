@@ -15,14 +15,15 @@
 package org.hyperledger.besu.ethereum.eth.transactions.layered;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hyperledger.besu.datatypes.TransactionType.EIP1559;
-import static org.hyperledger.besu.datatypes.TransactionType.FRONTIER;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.EIP1559;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.FRONTIER;
 import static org.hyperledger.besu.ethereum.eth.transactions.TransactionAddedResult.ADDED;
 import static org.hyperledger.besu.ethereum.eth.transactions.TransactionAddedResult.DROPPED;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.crypto.KeyPair;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
@@ -185,7 +186,7 @@ public class BaseFeePrioritizedTransactionsTest extends AbstractPrioritizedTrans
 
   @ParameterizedTest
   @EnumSource(
-      value = TransactionType.class,
+      value = MainnetTransactionType.class,
       names = {"EIP1559", "BLOB"})
   public void txWithEffectiveGasPriceBelowCurrentMineableMinGasPriceIsNotPrioritized(
       final TransactionType type) {
@@ -199,7 +200,7 @@ public class BaseFeePrioritizedTransactionsTest extends AbstractPrioritizedTrans
 
   @ParameterizedTest
   @EnumSource(
-      value = TransactionType.class,
+      value = MainnetTransactionType.class,
       names = {"EIP1559", "FRONTIER"})
   public void shouldPrioritizePriorityFeeThenTimeAddedToPoolSameTypeTxs(
       final TransactionType transactionType) {

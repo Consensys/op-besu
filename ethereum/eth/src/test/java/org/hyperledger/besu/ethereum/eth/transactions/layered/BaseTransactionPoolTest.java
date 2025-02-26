@@ -25,6 +25,7 @@ import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.Hash;
 import org.hyperledger.besu.datatypes.KZGCommitment;
 import org.hyperledger.besu.datatypes.KZGProof;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -92,13 +93,13 @@ public class BaseTransactionPoolTest {
   protected Transaction createEIP1559Transaction(
       final long nonce, final KeyPair keys, final int gasFeeMultiplier) {
     return createTransaction(
-        TransactionType.EIP1559, nonce, Wei.of(5000L).multiply(gasFeeMultiplier), 0, keys);
+        MainnetTransactionType.EIP1559, nonce, Wei.of(5000L).multiply(gasFeeMultiplier), 0, keys);
   }
 
   protected Transaction createEIP4844Transaction(
       final long nonce, final KeyPair keys, final int gasFeeMultiplier, final int blobCount) {
     return createTransaction(
-        TransactionType.BLOB,
+        MainnetTransactionType.BLOB,
         nonce,
         Wei.of(5000L).multiply(gasFeeMultiplier),
         Wei.of(5000L).multiply(gasFeeMultiplier).divide(10),
@@ -111,7 +112,7 @@ public class BaseTransactionPoolTest {
       final long nonce, final Wei maxGasPrice, final int txSize, final KeyPair keys) {
 
     final TransactionType txType =
-        TransactionType.values()[
+        MainnetTransactionType.values()[
             randomizeTxType.nextInt(txSize < blobTransaction0.getSize() ? 3 : 4)];
 
     final Transaction baseTx =
@@ -125,7 +126,8 @@ public class BaseTransactionPoolTest {
   protected Transaction createTransaction(
       final long nonce, final Wei maxGasPrice, final int payloadSize, final KeyPair keys) {
 
-    final TransactionType txType = TransactionType.values()[randomizeTxType.nextInt(4)];
+    final MainnetTransactionType txType =
+        MainnetTransactionType.values()[randomizeTxType.nextInt(4)];
 
     return switch (txType) {
       case FRONTIER, ACCESS_LIST, EIP1559, DELEGATE_CODE ->

@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.hyperledger.besu.crypto.SECP256K1;
 import org.hyperledger.besu.crypto.SignatureAlgorithm;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.tests.acceptance.dsl.account.Account;
 import org.hyperledger.besu.tests.acceptance.dsl.blockchain.Amount;
@@ -117,7 +118,7 @@ public class TransferTransactionBuilder {
     if (transactionType == null) {
       throw new IllegalArgumentException("NULL transactionType is not allowed.");
     }
-    if (transactionType == TransactionType.EIP1559 && chainId.isEmpty()) {
+    if (transactionType == MainnetTransactionType.EIP1559 && chainId.isEmpty()) {
       throw new IllegalStateException("Chain ID must be specified for EIP-1559 transactions");
     }
   }

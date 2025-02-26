@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 
@@ -70,7 +70,7 @@ public class SimpleTestTransactionBuilder {
     when(transaction.getR()).thenReturn(bigInteger(r));
     when(transaction.getS()).thenReturn(bigInteger(s));
     when(transaction.getTo()).thenReturn(Optional.ofNullable(address(toAddress)));
-    when(transaction.getType()).thenReturn(TransactionType.of(Integer.decode(type)));
+    when(transaction.getType()).thenReturn(MainnetTransactionType.of(Integer.decode(type)));
     when(transaction.getSender()).thenReturn(address(fromAddress));
     when(transaction.getPayload()).thenReturn(Bytes.fromHexString(input));
     when(transaction.getValue()).thenReturn(wei(value));

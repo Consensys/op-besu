@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.chain.Blockchain;
 import org.hyperledger.besu.ethereum.core.Block;
@@ -324,7 +324,7 @@ public class PrivateStorageMigrationTest {
 
   private Transaction publicTransaction() {
     return Transaction.builder()
-        .type(TransactionType.FRONTIER)
+        .type(MainnetTransactionType.FRONTIER)
         .nonce(0)
         .gasPrice(Wei.of(1000))
         .gasLimit(3000000)

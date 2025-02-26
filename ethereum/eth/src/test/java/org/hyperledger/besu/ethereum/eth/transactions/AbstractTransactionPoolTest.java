@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.quality.Strictness.LENIENT;
 
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Block;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
@@ -722,7 +722,7 @@ public abstract class AbstractTransactionPoolTest extends AbstractTransactionPoo
   public void shouldIgnoreEIP1559TransactionWhenNotAllowed() {
     final Transaction transaction =
         createBaseTransaction(1)
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxFeePerGas(Optional.of(Wei.of(100L)))
             .maxPriorityFeePerGas(Optional.of(Wei.of(50L)))
             .gasLimit(10)

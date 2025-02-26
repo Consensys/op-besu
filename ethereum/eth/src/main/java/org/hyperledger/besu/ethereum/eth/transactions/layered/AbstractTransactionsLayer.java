@@ -29,7 +29,7 @@ import static org.hyperledger.besu.ethereum.eth.transactions.layered.LayeredRemo
 
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.eth.manager.EthScheduler;
@@ -65,7 +65,7 @@ public abstract class AbstractTransactionsLayer implements TransactionsLayer {
   private static final Logger LOG = LoggerFactory.getLogger(AbstractTransactionsLayer.class);
   private static final NavigableMap<Long, PendingTransaction> EMPTY_SENDER_TXS = new TreeMap<>();
   private static final int[] UNLIMITED_PROMOTIONS_PER_TYPE =
-      new int[TransactionType.values().length];
+      new int[MainnetTransactionType.values().length];
 
   static {
     Arrays.fill(UNLIMITED_PROMOTIONS_PER_TYPE, Integer.MAX_VALUE);
@@ -86,7 +86,7 @@ public abstract class AbstractTransactionsLayer implements TransactionsLayer {
   private OptionalLong nextLayerOnAddedListenerId = OptionalLong.empty();
   private OptionalLong nextLayerOnDroppedListenerId = OptionalLong.empty();
   protected long spaceUsed = 0;
-  protected final int[] txCountByType = new int[TransactionType.values().length];
+  protected final int[] txCountByType = new int[MainnetTransactionType.values().length];
   private final BlobCache blobCache;
   private final EthScheduler ethScheduler;
 
@@ -106,7 +106,7 @@ public abstract class AbstractTransactionsLayer implements TransactionsLayer {
     metrics.initSpaceUsed(this::getLayerSpaceUsed, name());
     metrics.initTransactionCount(pendingTransactions::size, name());
     metrics.initUniqueSenderCount(txsBySender::size, name());
-    Arrays.stream(TransactionType.values())
+    Arrays.stream(MainnetTransactionType.values())
         .forEach(
             type ->
                 metrics.initTransactionCountByType(

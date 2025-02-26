@@ -19,6 +19,7 @@ import static org.hyperledger.besu.ethereum.eth.transactions.TransactionAddedRes
 import static org.hyperledger.besu.ethereum.eth.transactions.TransactionAddedResult.DROPPED;
 import static org.hyperledger.besu.ethereum.eth.transactions.layered.AddReason.NEW;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
@@ -32,7 +33,6 @@ import org.hyperledger.besu.ethereum.eth.transactions.TransactionPoolMetrics;
 import org.hyperledger.besu.ethereum.eth.transactions.TransactionPoolReplacementHandler;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,8 +43,8 @@ import org.junit.jupiter.api.Test;
 
 public abstract class AbstractPrioritizedTransactionsTestBase extends BaseTransactionPoolTest {
   protected static final int MAX_TRANSACTIONS = 5;
-  protected static final EnumMap<TransactionType, Integer> MAX_TRANSACTIONS_BY_TYPE =
-      new EnumMap<>(Map.of(TransactionType.BLOB, 2));
+  protected static final Map<TransactionType, Integer> MAX_TRANSACTIONS_BY_TYPE =
+      Map.of(MainnetTransactionType.BLOB, 2);
   protected final TransactionPoolMetrics txPoolMetrics = new TransactionPoolMetrics(metricsSystem);
   protected final EvictCollectorLayer evictCollector = new EvictCollectorLayer(txPoolMetrics);
   protected final MiningConfiguration miningConfiguration =

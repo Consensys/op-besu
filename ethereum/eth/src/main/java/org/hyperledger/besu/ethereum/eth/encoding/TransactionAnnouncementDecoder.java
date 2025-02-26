@@ -15,6 +15,7 @@
 package org.hyperledger.besu.ethereum.eth.encoding;
 
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.eth.EthProtocolVersion;
 import org.hyperledger.besu.ethereum.eth.transactions.TransactionAnnouncement;
@@ -77,7 +78,7 @@ public class TransactionAnnouncementDecoder {
     final List<TransactionType> types = new ArrayList<>();
     final byte[] bytes = input.readBytes().toArray();
     for (final byte b : bytes) {
-      types.add(b == 0 ? TransactionType.FRONTIER : TransactionType.of(b));
+      types.add(b == 0 ? MainnetTransactionType.FRONTIER : MainnetTransactionType.of(b));
     }
 
     List<Long> sizes =

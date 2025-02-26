@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.config.StubGenesisConfigOptions;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.ethereum.BlockProcessingOutputs;
 import org.hyperledger.besu.ethereum.BlockProcessingResult;
 import org.hyperledger.besu.ethereum.BlockValidator;
@@ -202,7 +202,7 @@ public class BackwardSyncContextTest {
         new BlockDataGenerator.BlockOptions()
             .setBlockNumber(i)
             .setParentHash(parentHash)
-            .transactionTypes(TransactionType.ACCESS_LIST);
+            .transactionTypes(MainnetTransactionType.ACCESS_LIST);
     return blockDataGenerator.block(options);
   }
 

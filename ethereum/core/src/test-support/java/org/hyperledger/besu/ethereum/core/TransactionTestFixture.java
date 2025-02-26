@@ -14,10 +14,16 @@
  */
 package org.hyperledger.besu.ethereum.core;
 
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.ACCESS_LIST;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.BLOB;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.EIP1559;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.FRONTIER;
+
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -30,7 +36,7 @@ import org.apache.tuweni.bytes.Bytes;
 
 public class TransactionTestFixture {
 
-  private TransactionType transactionType = TransactionType.FRONTIER;
+  private TransactionType transactionType = MainnetTransactionType.FRONTIER;
 
   private long nonce = 0;
 
@@ -67,33 +73,26 @@ public class TransactionTestFixture {
         .value(value)
         .sender(sender);
 
-    switch (transactionType) {
-      case FRONTIER:
-        builder.gasPrice(gasPrice.orElse(Wei.of(5000)));
-        break;
-      case ACCESS_LIST:
-        builder.gasPrice(gasPrice.orElse(Wei.of(5000)));
-        builder.accessList(accessListEntries.orElse(List.of()));
-        break;
-      case EIP1559:
-        builder.maxPriorityFeePerGas(maxPriorityFeePerGas.orElse(Wei.of(500)));
-        builder.maxFeePerGas(maxFeePerGas.orElse(Wei.of(5000)));
-        builder.accessList(accessListEntries.orElse(List.of()));
-        break;
-      case BLOB:
-        builder.maxPriorityFeePerGas(maxPriorityFeePerGas.orElse(Wei.of(500)));
-        builder.maxFeePerGas(maxFeePerGas.orElse(Wei.of(5000)));
-        builder.accessList(accessListEntries.orElse(List.of()));
-        builder.maxFeePerBlobGas(maxFeePerBlobGas.orElse(Wei.ONE));
-        if (blobs.isPresent()) {
-          builder.kzgBlobs(
-              blobs.get().getKzgCommitments(), blobs.get().getBlobs(), blobs.get().getKzgProofs());
-        } else if (versionedHashes.isPresent()) {
-          builder.versionedHashes(versionedHashes.get());
-        }
-        break;
-      case DELEGATE_CODE:
-        break;
+    if (FRONTIER.getTypeValue() == transactionType.getTypeValue()) {
+      builder.gasPrice(gasPrice.orElse(Wei.of(5000)));
+    } else if (ACCESS_LIST.getTypeValue() == transactionType.getTypeValue()) {
+      builder.gasPrice(gasPrice.orElse(Wei.of(5000)));
+      builder.accessList(accessListEntries.orElse(List.of()));
+    } else if (EIP1559.getTypeValue() == transactionType.getTypeValue()) {
+      builder.maxPriorityFeePerGas(maxPriorityFeePerGas.orElse(Wei.of(500)));
+      builder.maxFeePerGas(maxFeePerGas.orElse(Wei.of(5000)));
+      builder.accessList(accessListEntries.orElse(List.of()));
+    } else if (BLOB.getTypeValue() == transactionType.getTypeValue()) {
+      builder.maxPriorityFeePerGas(maxPriorityFeePerGas.orElse(Wei.of(500)));
+      builder.maxFeePerGas(maxFeePerGas.orElse(Wei.of(5000)));
+      builder.accessList(accessListEntries.orElse(List.of()));
+      builder.maxFeePerBlobGas(maxFeePerBlobGas.orElse(Wei.ONE));
+      if (blobs.isPresent()) {
+        builder.kzgBlobs(
+            blobs.get().getKzgCommitments(), blobs.get().getBlobs(), blobs.get().getKzgProofs());
+      } else if (versionedHashes.isPresent()) {
+        builder.versionedHashes(versionedHashes.get());
+      }
     }
 
     to.ifPresent(builder::to);

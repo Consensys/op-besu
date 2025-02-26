@@ -22,7 +22,7 @@ import static org.hyperledger.besu.ethereum.transaction.TransactionInvalidReason
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.ProtocolContext;
@@ -451,11 +451,12 @@ public class TransactionPool implements BlockAddedObserver {
               "Transaction gas limit of %s exceeds block gas limit of %s",
               transaction.getGasLimit(), chainHeadBlockHeader.getGasLimit()));
     }
-    if (transaction.getType().equals(TransactionType.EIP1559) && !feeMarket.implementsBaseFee()) {
+    if (transaction.getType().getTypeValue() == MainnetTransactionType.EIP1559.getTypeValue()
+        && !feeMarket.implementsBaseFee()) {
       return ValidationResultAndAccount.invalid(
           TransactionInvalidReason.INVALID_TRANSACTION_FORMAT,
           "EIP-1559 transaction are not allowed yet");
-    } else if (transaction.getType().equals(TransactionType.BLOB)
+    } else if (transaction.getType().getTypeValue() == MainnetTransactionType.BLOB.getTypeValue()
         && transaction.getBlobsWithCommitments().isEmpty()) {
       return ValidationResultAndAccount.invalid(
           TransactionInvalidReason.INVALID_BLOBS, "Blob transaction must have at least one blob");

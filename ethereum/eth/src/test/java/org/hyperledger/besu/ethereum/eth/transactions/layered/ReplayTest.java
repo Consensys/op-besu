@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
@@ -51,7 +52,6 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,10 +173,10 @@ public class ReplayTest {
         .map(e -> e.split("="))
         .collect(
             Collectors.toMap(
-                a -> TransactionType.valueOf(a[0]),
+                a -> MainnetTransactionType.valueOf(a[0]),
                 a -> Integer.parseInt(a[1]),
                 (a, b) -> a,
-                () -> new EnumMap<>(TransactionType.class)));
+                () -> new HashMap<>()));
   }
 
   private List<Address> readPrioritySenders(final String line) {

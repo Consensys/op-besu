@@ -17,7 +17,7 @@ package org.hyperledger.besu.ethereum.api.graphql;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.ConsensusContext;
 import org.hyperledger.besu.ethereum.ProtocolContext;
@@ -104,7 +104,7 @@ public abstract class AbstractEthGraphQLHttpServiceTest {
             Collections.singleton(
                 new PendingTransaction.Local(
                     Transaction.builder()
-                        .type(TransactionType.FRONTIER)
+                        .type(MainnetTransactionType.FRONTIER)
                         .nonce(42)
                         .gasLimit(654321)
                         .gasPrice(Wei.ONE)

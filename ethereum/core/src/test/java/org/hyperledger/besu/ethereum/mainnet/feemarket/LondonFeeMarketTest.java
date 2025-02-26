@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.core.TransactionTestFixture;
@@ -36,7 +36,7 @@ public class LondonFeeMarketTest {
   public void satisfiesFloorTxCost() {
     final Transaction transaction =
         new TransactionTestFixture()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .gasPrice(Wei.of(7))
             .createTransaction(KEY_PAIR1);
 
@@ -48,7 +48,7 @@ public class LondonFeeMarketTest {
   public void maxFeePerGasLessThanMinimumBaseFee() {
     final Transaction transaction =
         new TransactionTestFixture()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxFeePerGas(Optional.of(Wei.of(6)))
             .maxPriorityFeePerGas(Optional.of(Wei.of(0)))
             .gasPrice(null)
@@ -62,7 +62,7 @@ public class LondonFeeMarketTest {
   public void satisfiesFloorTxCostWhenBaseFeeInitialValueIsZero() {
     final Transaction transaction =
         new TransactionTestFixture()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxFeePerGas(Optional.of(Wei.ZERO))
             .maxPriorityFeePerGas(Optional.of(Wei.ZERO))
             .gasPrice(null)
