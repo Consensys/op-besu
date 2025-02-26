@@ -23,6 +23,7 @@ import java.math.BigInteger;
 
 import org.apache.tuweni.bytes.Bytes;
 
+/** Optimism deposit transaction encoder. */
 public class OptimismDepositTransactionEncoder {
 
   public static void encode(final Transaction transaction, final RLPOutput out) {
