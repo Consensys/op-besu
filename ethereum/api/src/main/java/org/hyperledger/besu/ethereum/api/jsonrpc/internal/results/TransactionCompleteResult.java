@@ -16,6 +16,7 @@ package org.hyperledger.besu.ethereum.api.jsonrpc.internal.results;
 
 import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.CodeDelegation;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -121,7 +122,7 @@ public class TransactionCompleteResult implements TransactionResult {
     this.nonce = Quantity.create(transaction.getNonce());
     this.to = transaction.getTo().map(Bytes::toHexString).orElse(null);
     this.transactionIndex = Quantity.create(tx.getTransactionIndex().get());
-    if (transactionType == TransactionType.FRONTIER) {
+    if (transactionType == MainnetTransactionType.FRONTIER) {
       this.type = Quantity.create(0);
       this.yParity = null;
       this.v = Quantity.create(transaction.getV());
@@ -129,9 +130,9 @@ public class TransactionCompleteResult implements TransactionResult {
       this.type = Quantity.create(transactionType.getSerializedType());
       this.yParity = Quantity.create(transaction.getYParity());
       this.v =
-          (transactionType == TransactionType.ACCESS_LIST
-                      || transactionType == TransactionType.EIP1559)
-                  || transactionType == TransactionType.DELEGATE_CODE
+          (transactionType == MainnetTransactionType.ACCESS_LIST
+                      || transactionType == MainnetTransactionType.EIP1559)
+                  || transactionType == MainnetTransactionType.DELEGATE_CODE
               ? Quantity.create(transaction.getYParity())
               : null;
     }

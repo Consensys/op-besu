@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.hyperledger.besu.crypto.SECP256K1;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.BlockBody;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
@@ -189,7 +189,7 @@ public class MessageWrapperTest {
             singletonList(
                 singletonList(
                     new TransactionReceipt(
-                        TransactionType.FRONTIER,
+                        MainnetTransactionType.FRONTIER,
                         0,
                         1,
                         singletonList(

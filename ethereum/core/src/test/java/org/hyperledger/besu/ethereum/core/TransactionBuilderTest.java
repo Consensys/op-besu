@@ -23,6 +23,7 @@ import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.AccessListEntry;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.rlp.BytesValueRLPOutput;
@@ -58,14 +59,16 @@ class TransactionBuilderTest {
 
     assertThat(guessedTypes)
         .containsExactlyInAnyOrder(
-            TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559);
+            MainnetTransactionType.FRONTIER,
+            MainnetTransactionType.ACCESS_LIST,
+            MainnetTransactionType.EIP1559);
   }
 
   @Test
   void zeroBlobTransactionIsInvalid() {
     TransactionTestFixture ttf =
         new TransactionTestFixture()
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(Optional.of(BigInteger.ONE))
             .versionedHashes(Optional.of(List.of()))
             .maxFeePerGas(Optional.of(Wei.of(5)))

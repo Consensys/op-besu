@@ -16,6 +16,10 @@ package org.hyperledger.besu.ethereum.core;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.stream.Collectors.toUnmodifiableSet;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.ACCESS_LIST;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.BLOB;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.EIP1559;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.FRONTIER;
 import static org.hyperledger.besu.ethereum.core.InMemoryKeyValueStorageProvider.createInMemoryWorldStateArchive;
 
 import org.hyperledger.besu.crypto.KeyPair;
@@ -25,6 +29,7 @@ import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -338,8 +343,7 @@ public class BlockDataGenerator {
 
   private TransactionType transactionType() {
     // TODO: when TransactionType.EIP4844 is fully supported, revert this.
-    return transactionType(
-        TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559);
+    return transactionType(FRONTIER, ACCESS_LIST, EIP1559);
   }
 
   private TransactionType transactionType(final TransactionType... transactionTypes) {
@@ -368,20 +372,22 @@ public class BlockDataGenerator {
 
   public Transaction transaction(
       final TransactionType transactionType, final Bytes payload, final Address to) {
-    return switch (transactionType) {
-      case FRONTIER -> frontierTransaction(payload, to);
-      case EIP1559 -> eip1559Transaction(payload, to);
-      case ACCESS_LIST -> accessListTransaction(payload, to);
-      case BLOB -> blobTransaction(payload, to);
-      case DELEGATE_CODE -> null;
-      case OPTIMISM_DEPOSIT -> null;
-        // no default, all types accounted for.
-    };
+    if (FRONTIER.getTypeValue() == transactionType.getTypeValue()) {
+      return frontierTransaction(payload, to);
+    } else if (EIP1559.getTypeValue() == transactionType.getTypeValue()) {
+      return eip1559Transaction(payload, to);
+    } else if (ACCESS_LIST.getTypeValue() == transactionType.getTypeValue()) {
+      return accessListTransaction(payload, to);
+    } else if (BLOB.getTypeValue() == transactionType.getTypeValue()) {
+      return blobTransaction(payload, to);
+    } else {
+      return null;
+    }
   }
 
   private Transaction accessListTransaction(final Bytes payload, final Address to) {
     return Transaction.builder()
-        .type(TransactionType.ACCESS_LIST)
+        .type(ACCESS_LIST)
         .nonce(random.nextLong())
         .gasPrice(Wei.wrap(bytesValue(4)))
         .gasLimit(positiveLong())
@@ -407,7 +413,7 @@ public class BlockDataGenerator {
 
   private Transaction eip1559Transaction(final Bytes payload, final Address to) {
     return Transaction.builder()
-        .type(TransactionType.EIP1559)
+        .type(EIP1559)
         .nonce(random.nextLong())
         .maxPriorityFeePerGas(Wei.wrap(bytesValue(4)))
         .maxFeePerGas(Wei.wrap(bytesValue(4)))
@@ -421,7 +427,7 @@ public class BlockDataGenerator {
 
   private Transaction blobTransaction(final Bytes payload, final Address to) {
     return Transaction.builder()
-        .type(TransactionType.BLOB)
+        .type(BLOB)
         .nonce(random.nextLong())
         .maxPriorityFeePerGas(Wei.wrap(bytesValue(4)))
         .maxFeePerGas(Wei.wrap(bytesValue(4)))
@@ -437,7 +443,7 @@ public class BlockDataGenerator {
 
   private Transaction frontierTransaction(final Bytes payload, final Address to) {
     return Transaction.builder()
-        .type(TransactionType.FRONTIER)
+        .type(FRONTIER)
         .nonce(random.nextLong())
         .gasPrice(Wei.wrap(bytesValue(4)))
         .gasLimit(positiveLong())
@@ -456,8 +462,7 @@ public class BlockDataGenerator {
   }
 
   public Set<Transaction> transactions(final int n) {
-    return transactions(
-        n, TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559);
+    return transactions(n, FRONTIER, ACCESS_LIST, EIP1559);
   }
 
   public Set<Transaction> transactionsWithAllTypes() {
@@ -467,8 +472,7 @@ public class BlockDataGenerator {
   public Set<Transaction> transactionsWithAllTypes(final int atLeast) {
     checkArgument(atLeast >= 0);
     final HashSet<TransactionType> remainingTransactionTypes =
-        new HashSet<>(
-            Set.of(TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559));
+        new HashSet<>(Set.of(FRONTIER, ACCESS_LIST, EIP1559));
     final HashSet<Transaction> transactions = new HashSet<>();
     while (transactions.size() < atLeast || !remainingTransactionTypes.isEmpty()) {
       final Transaction newTransaction = transaction();
@@ -647,7 +651,9 @@ public class BlockDataGenerator {
     private boolean hasOmmers = true;
     private boolean hasTransactions = true;
     private TransactionType[] transactionTypes = {
-      TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559
+      MainnetTransactionType.FRONTIER,
+      MainnetTransactionType.ACCESS_LIST,
+      MainnetTransactionType.EIP1559
     };
     private Optional<Address> coinbase = Optional.empty();
     private Optional<Optional<Wei>> maybeBaseFee = Optional.empty();

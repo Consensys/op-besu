@@ -18,7 +18,7 @@ import org.hyperledger.besu.crypto.SECPSignature;
 import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.permissioning.AccountLocalConfigPermissioningController;
@@ -135,7 +135,7 @@ public class AccountPermissioningControllerFactory {
 
       final Transaction transaction =
           Transaction.builder()
-              .type(TransactionType.FRONTIER)
+              .type(MainnetTransactionType.FRONTIER)
               .sender(Address.ZERO)
               .gasLimit(0)
               .gasPrice(Wei.ZERO)

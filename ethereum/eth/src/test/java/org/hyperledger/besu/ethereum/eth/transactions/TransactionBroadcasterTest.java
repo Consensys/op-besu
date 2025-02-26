@@ -15,7 +15,6 @@
 package org.hyperledger.besu.ethereum.eth.transactions;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hyperledger.besu.datatypes.TransactionType.BLOB;
 import static org.hyperledger.besu.ethereum.eth.transactions.PendingTransaction.toTransactionList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -26,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.core.BlockDataGenerator;
 import org.hyperledger.besu.ethereum.core.Transaction;
@@ -255,7 +255,8 @@ public class TransactionBroadcasterTest {
     when(ethPeers.streamAvailablePeers())
         .thenReturn(Stream.concat(eth65Peers.stream(), Stream.of(ethPeerNoEth65)));
 
-    List<Transaction> txs = toTransactionList(setupTransactionPool(BLOB, 0, 1));
+    List<Transaction> txs =
+        toTransactionList(setupTransactionPool(MainnetTransactionType.BLOB, 0, 1));
 
     txBroadcaster.onTransactionsAdded(txs);
     // the shuffled hash only peer list is always:
@@ -287,8 +288,9 @@ public class TransactionBroadcasterTest {
     // 1 full broadcast transaction type
     // 1 hash only broadcast transaction type
     List<Transaction> fullBroadcastTxs =
-        toTransactionList(setupTransactionPool(TransactionType.EIP1559, 0, 1));
-    List<Transaction> hashBroadcastTxs = toTransactionList(setupTransactionPool(BLOB, 0, 1));
+        toTransactionList(setupTransactionPool(MainnetTransactionType.EIP1559, 0, 1));
+    List<Transaction> hashBroadcastTxs =
+        toTransactionList(setupTransactionPool(MainnetTransactionType.BLOB, 0, 1));
 
     List<Transaction> mixedTxs = new ArrayList<>(fullBroadcastTxs);
     mixedTxs.addAll(hashBroadcastTxs);

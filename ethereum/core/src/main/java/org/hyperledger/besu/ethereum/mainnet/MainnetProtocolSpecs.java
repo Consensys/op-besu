@@ -21,6 +21,7 @@ import org.hyperledger.besu.config.PowAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.BlockProcessingResult;
@@ -441,7 +442,7 @@ public abstract class MainnetProtocolSpecs {
                     gasLimitCalculator,
                     true,
                     chainId,
-                    Set.of(TransactionType.FRONTIER, TransactionType.ACCESS_LIST)))
+                    Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.ACCESS_LIST)))
         .transactionReceiptFactory(
             enableRevertReason
                 ? MainnetProtocolSpecs::berlinTransactionReceiptFactoryWithReasonEnabled
@@ -491,9 +492,9 @@ public abstract class MainnetProtocolSpecs {
                     true,
                     chainId,
                     Set.of(
-                        TransactionType.FRONTIER,
-                        TransactionType.ACCESS_LIST,
-                        TransactionType.EIP1559),
+                        MainnetTransactionType.FRONTIER,
+                        MainnetTransactionType.ACCESS_LIST,
+                        MainnetTransactionType.EIP1559),
                     Integer.MAX_VALUE))
         .transactionProcessorBuilder(
             (gasCalculator,
@@ -653,9 +654,9 @@ public abstract class MainnetProtocolSpecs {
                     true,
                     chainId,
                     Set.of(
-                        TransactionType.FRONTIER,
-                        TransactionType.ACCESS_LIST,
-                        TransactionType.EIP1559),
+                        MainnetTransactionType.FRONTIER,
+                        MainnetTransactionType.ACCESS_LIST,
+                        MainnetTransactionType.EIP1559),
                     evm.getMaxInitcodeSize()))
         .withdrawalsProcessor(new WithdrawalsProcessor())
         .withdrawalsValidator(new WithdrawalsValidator.AllowedWithdrawals())
@@ -733,10 +734,10 @@ public abstract class MainnetProtocolSpecs {
                     true,
                     chainId,
                     Set.of(
-                        TransactionType.FRONTIER,
-                        TransactionType.ACCESS_LIST,
-                        TransactionType.EIP1559,
-                        TransactionType.BLOB),
+                        MainnetTransactionType.FRONTIER,
+                        MainnetTransactionType.ACCESS_LIST,
+                        MainnetTransactionType.EIP1559,
+                        MainnetTransactionType.BLOB),
                     evm.getMaxInitcodeSize()))
         .precompileContractRegistryBuilder(MainnetPrecompiledContractRegistries::cancun)
         .blockHeaderValidatorBuilder(MainnetBlockHeaderValidator::cancunBlockHeaderValidator)
@@ -811,11 +812,11 @@ public abstract class MainnetProtocolSpecs {
                     true,
                     chainId,
                     Set.of(
-                        TransactionType.FRONTIER,
-                        TransactionType.ACCESS_LIST,
-                        TransactionType.EIP1559,
-                        TransactionType.BLOB,
-                        TransactionType.DELEGATE_CODE),
+                        MainnetTransactionType.FRONTIER,
+                        MainnetTransactionType.ACCESS_LIST,
+                        MainnetTransactionType.EIP1559,
+                        MainnetTransactionType.BLOB,
+                        MainnetTransactionType.DELEGATE_CODE),
                     evm.getMaxInitcodeSize()))
 
         // EIP-2935 Blockhash processor

@@ -31,6 +31,7 @@ import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.Hash;
 import org.hyperledger.besu.datatypes.KZGCommitment;
 import org.hyperledger.besu.datatypes.KZGProof;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -152,12 +153,12 @@ class BlobSizeTransactionSelectorTest {
 
   private PendingTransaction createEIP1559PendingTransaction() {
     return PendingTransaction.newPendingTransaction(
-        createTransaction(TransactionType.EIP1559, 0), false, false);
+        createTransaction(MainnetTransactionType.EIP1559, 0), false, false);
   }
 
   private PendingTransaction createBlobPendingTransaction(final int blobCount) {
     return PendingTransaction.newPendingTransaction(
-        createTransaction(TransactionType.BLOB, blobCount), false, false);
+        createTransaction(MainnetTransactionType.BLOB, blobCount), false, false);
   }
 
   private Transaction createTransaction(final TransactionType type, final int blobCount) {

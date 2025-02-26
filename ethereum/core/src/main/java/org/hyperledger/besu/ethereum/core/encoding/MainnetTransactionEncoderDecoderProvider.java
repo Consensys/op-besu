@@ -16,6 +16,7 @@ package org.hyperledger.besu.ethereum.core.encoding;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 
 import com.google.common.collect.ImmutableMap;
@@ -24,49 +25,51 @@ import com.google.common.collect.ImmutableMap;
 public class MainnetTransactionEncoderDecoderProvider
     implements TransactionEncoder.EncoderProvider, TransactionDecoder.DecoderProvider {
 
-  private static final ImmutableMap<TransactionType, TransactionEncoder.Encoder>
+  private static final ImmutableMap<Integer, TransactionEncoder.Encoder>
       TYPED_TRANSACTION_ENCODERS =
           ImmutableMap.of(
-              TransactionType.ACCESS_LIST,
+              MainnetTransactionType.ACCESS_LIST.getTypeValue(),
               AccessListTransactionEncoder::encode,
-              TransactionType.EIP1559,
+              MainnetTransactionType.EIP1559.getTypeValue(),
               EIP1559TransactionEncoder::encode,
-              TransactionType.BLOB,
+              MainnetTransactionType.BLOB.getTypeValue(),
               BlobTransactionEncoder::encode,
-              TransactionType.DELEGATE_CODE,
+              MainnetTransactionType.DELEGATE_CODE.getTypeValue(),
               CodeDelegationTransactionEncoder::encode);
 
-  private static final ImmutableMap<TransactionType, TransactionDecoder.Decoder>
+  private static final ImmutableMap<Integer, TransactionDecoder.Decoder>
       TYPED_TRANSACTION_DECODERS =
           ImmutableMap.of(
-              TransactionType.ACCESS_LIST,
+              MainnetTransactionType.ACCESS_LIST.getTypeValue(),
               AccessListTransactionDecoder::decode,
-              TransactionType.EIP1559,
+              MainnetTransactionType.EIP1559.getTypeValue(),
               EIP1559TransactionDecoder::decode,
-              TransactionType.BLOB,
+              MainnetTransactionType.BLOB.getTypeValue(),
               BlobTransactionDecoder::decode,
-              TransactionType.DELEGATE_CODE,
+              MainnetTransactionType.DELEGATE_CODE.getTypeValue(),
               CodeDelegationTransactionDecoder::decode);
 
-  private static final ImmutableMap<TransactionType, TransactionEncoder.Encoder>
+  private static final ImmutableMap<Integer, TransactionEncoder.Encoder>
       POOLED_TRANSACTION_ENCODERS =
-          ImmutableMap.of(TransactionType.BLOB, BlobPooledTransactionEncoder::encode);
+          ImmutableMap.of(
+              MainnetTransactionType.BLOB.getTypeValue(), BlobPooledTransactionEncoder::encode);
 
-  private static final ImmutableMap<TransactionType, TransactionDecoder.Decoder>
+  private static final ImmutableMap<Integer, TransactionDecoder.Decoder>
       POOLED_TRANSACTION_DECODERS =
-          ImmutableMap.of(TransactionType.BLOB, BlobPooledTransactionDecoder::decode);
+          ImmutableMap.of(
+              MainnetTransactionType.BLOB.getTypeValue(), BlobPooledTransactionDecoder::decode);
 
   @Override
   public TransactionEncoder.Encoder getEncoder(
       final TransactionType transactionType, final EncodingContext encodingContext) {
 
     if (encodingContext.equals(EncodingContext.POOLED_TRANSACTION)) {
-      if (POOLED_TRANSACTION_ENCODERS.containsKey(transactionType)) {
-        return POOLED_TRANSACTION_ENCODERS.get(transactionType);
+      if (POOLED_TRANSACTION_ENCODERS.containsKey(transactionType.getTypeValue())) {
+        return POOLED_TRANSACTION_ENCODERS.get(transactionType.getTypeValue());
       }
     }
     return checkNotNull(
-        TYPED_TRANSACTION_ENCODERS.get(transactionType),
+        TYPED_TRANSACTION_ENCODERS.get(transactionType.getTypeValue()),
         "Developer Error. A supported transaction type %s has no associated encoding logic",
         transactionType);
   }
@@ -75,12 +78,12 @@ public class MainnetTransactionEncoderDecoderProvider
   public TransactionDecoder.Decoder getDecoder(
       final TransactionType transactionType, final EncodingContext encodingContext) {
     if (encodingContext.equals(EncodingContext.POOLED_TRANSACTION)) {
-      if (POOLED_TRANSACTION_DECODERS.containsKey(transactionType)) {
-        return POOLED_TRANSACTION_DECODERS.get(transactionType);
+      if (POOLED_TRANSACTION_DECODERS.containsKey(transactionType.getTypeValue())) {
+        return POOLED_TRANSACTION_DECODERS.get(transactionType.getTypeValue());
       }
     }
     return checkNotNull(
-        TYPED_TRANSACTION_DECODERS.get(transactionType),
+        TYPED_TRANSACTION_DECODERS.get(transactionType.getTypeValue()),
         "Developer Error. A supported transaction type %s has no associated decoding logic",
         transactionType);
   }

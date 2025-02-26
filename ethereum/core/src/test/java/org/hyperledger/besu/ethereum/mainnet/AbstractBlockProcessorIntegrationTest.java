@@ -24,7 +24,7 @@ import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.BlockProcessingResult;
 import org.hyperledger.besu.ethereum.chain.DefaultBlockchain;
@@ -674,7 +674,7 @@ class AbstractBlockProcessorIntegrationTest {
       final Optional<Integer> value) {
     Bytes payload = encodeFunctionCall(methodSignature, value);
     return Transaction.builder()
-        .type(TransactionType.EIP1559)
+        .type(MainnetTransactionType.EIP1559)
         .nonce(nonce)
         .maxPriorityFeePerGas(Wei.of(5))
         .maxFeePerGas(Wei.of(7))
@@ -694,7 +694,7 @@ class AbstractBlockProcessorIntegrationTest {
       final String address) {
     Bytes payload = encodeFunctionCall(methodSignature, address);
     return Transaction.builder()
-        .type(TransactionType.EIP1559)
+        .type(MainnetTransactionType.EIP1559)
         .nonce(nonce)
         .maxPriorityFeePerGas(Wei.of(5))
         .maxFeePerGas(Wei.of(7))
@@ -715,7 +715,7 @@ class AbstractBlockProcessorIntegrationTest {
       final long value) {
     Bytes payload = encodeFunctionCall(methodSignature, address, value);
     return Transaction.builder()
-        .type(TransactionType.EIP1559)
+        .type(MainnetTransactionType.EIP1559)
         .nonce(nonce)
         .maxPriorityFeePerGas(Wei.of(5))
         .maxFeePerGas(Wei.of(7))
@@ -780,7 +780,7 @@ class AbstractBlockProcessorIntegrationTest {
       final String hexAddress,
       final KeyPair keyPair) {
     return Transaction.builder()
-        .type(TransactionType.EIP1559)
+        .type(MainnetTransactionType.EIP1559)
         .nonce(nonce)
         .maxPriorityFeePerGas(Wei.of(maxPriorityFeePerGas))
         .maxFeePerGas(Wei.of(maxFeePerGas))

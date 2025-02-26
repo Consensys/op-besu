@@ -19,7 +19,7 @@ import static org.hyperledger.besu.ethereum.api.jsonrpc.JsonRpcErrorConverter.co
 import static org.hyperledger.besu.ethereum.api.jsonrpc.internal.response.RpcErrorType.DECODE_ERROR;
 
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.api.jsonrpc.RpcMethod;
 import org.hyperledger.besu.ethereum.api.jsonrpc.internal.JsonRpcRequestContext;
@@ -143,7 +143,7 @@ public abstract class AbstractEeaSendRawTransaction implements JsonRpcMethod {
 
     final Transaction unsignedPrivateMarkerTransaction =
         new Transaction.Builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .sender(sender)
             .nonce(nonce)
             .gasPrice(privateTransaction.getGasPrice())

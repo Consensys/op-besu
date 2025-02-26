@@ -17,10 +17,10 @@ package org.hyperledger.besu.ethereum.eth.transactions.layered;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.awaitility.Awaitility.await;
-import static org.hyperledger.besu.datatypes.TransactionType.ACCESS_LIST;
-import static org.hyperledger.besu.datatypes.TransactionType.BLOB;
-import static org.hyperledger.besu.datatypes.TransactionType.EIP1559;
-import static org.hyperledger.besu.datatypes.TransactionType.FRONTIER;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.ACCESS_LIST;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.BLOB;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.EIP1559;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.FRONTIER;
 import static org.hyperledger.besu.ethereum.eth.transactions.layered.LayeredRemovalReason.PoolRemovalReason.INVALIDATED;
 import static org.hyperledger.besu.ethereum.eth.transactions.layered.LayersTest.Sender.S1;
 import static org.hyperledger.besu.ethereum.eth.transactions.layered.LayersTest.Sender.S2;
@@ -33,6 +33,7 @@ import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.datatypes.Address;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
@@ -1593,14 +1594,14 @@ public class LayersTest extends BaseTransactionPoolTest {
         fail(
             "Transaction for sender " + sender.name() + " with nonce " + nonce + " already exists");
       }
+      final MainnetTransactionType transactionType = (MainnetTransactionType) type;
       final var newPendingTx =
-          switch (type) {
+          switch (transactionType) {
             case FRONTIER -> createFrontierPendingTransaction(sender, nonce);
             case ACCESS_LIST -> createAccessListPendingTransaction(sender, nonce);
             case EIP1559 -> createEIP1559PendingTransaction(sender, nonce);
             case BLOB -> createBlobPendingTransaction(sender, nonce);
             case DELEGATE_CODE -> throw new UnsupportedOperationException();
-            case OPTIMISM_DEPOSIT -> throw new UnsupportedOperationException();
           };
       liveTxsBySender.get(sender).put(nonce, newPendingTx);
       return newPendingTx;

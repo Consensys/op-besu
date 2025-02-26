@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.hyperledger.besu.crypto.SECP256K1;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.CodeDelegation;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.tests.acceptance.dsl.AcceptanceTestBase;
@@ -98,7 +98,7 @@ public class CodeDelegationTransactionAcceptanceTest extends AcceptanceTestBase 
 
     final Transaction tx =
         Transaction.builder()
-            .type(TransactionType.DELEGATE_CODE)
+            .type(MainnetTransactionType.DELEGATE_CODE)
             .chainId(BigInteger.valueOf(20211))
             .nonce(0)
             .maxPriorityFeePerGas(Wei.of(1000000000))
@@ -156,7 +156,7 @@ public class CodeDelegationTransactionAcceptanceTest extends AcceptanceTestBase 
 
     final Transaction tx =
         Transaction.builder()
-            .type(TransactionType.DELEGATE_CODE)
+            .type(MainnetTransactionType.DELEGATE_CODE)
             .chainId(BigInteger.valueOf(20211))
             .nonce(0)
             .maxPriorityFeePerGas(Wei.of(1000000000))
@@ -204,7 +204,7 @@ public class CodeDelegationTransactionAcceptanceTest extends AcceptanceTestBase 
 
     final Transaction txSendEthToOtherAccount =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.valueOf(20211))
             .nonce(2)
             .maxPriorityFeePerGas(Wei.of(10))

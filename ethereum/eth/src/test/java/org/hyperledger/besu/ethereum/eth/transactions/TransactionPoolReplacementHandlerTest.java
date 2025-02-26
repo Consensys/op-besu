@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.ethereum.core.BlockHeader;
 import org.hyperledger.besu.ethereum.core.Transaction;
 
@@ -85,7 +85,7 @@ public class TransactionPoolReplacementHandlerTest {
   private static PendingTransaction mockTransactionInfo() {
     final PendingTransaction pendingTransaction = mock(PendingTransaction.class);
     final Transaction transaction = mock(Transaction.class);
-    when(transaction.getType()).thenReturn(TransactionType.FRONTIER);
+    when(transaction.getType()).thenReturn(MainnetTransactionType.FRONTIER);
     when(pendingTransaction.getTransaction()).thenReturn(transaction);
     return pendingTransaction;
   }

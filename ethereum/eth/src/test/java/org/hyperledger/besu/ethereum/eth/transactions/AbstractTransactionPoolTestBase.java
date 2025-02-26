@@ -36,7 +36,7 @@ import org.hyperledger.besu.config.GenesisConfigFile;
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.ProtocolContext;
 import org.hyperledger.besu.ethereum.chain.BadBlockManager;
@@ -158,7 +158,7 @@ public abstract class AbstractTransactionPoolTestBase {
     return new TransactionTestFixture()
         .nonce(transactionNumber)
         .gasLimit(blockGasLimit)
-        .type(TransactionType.FRONTIER);
+        .type(MainnetTransactionType.FRONTIER);
   }
 
   protected TransactionTestFixture createBaseTransactionBaseFeeMarket(final int nonce) {
@@ -168,7 +168,7 @@ public abstract class AbstractTransactionPoolTestBase {
         .gasPrice(null)
         .maxFeePerGas(Optional.of(Wei.of(5000L)))
         .maxPriorityFeePerGas(Optional.of(Wei.of(1000L)))
-        .type(TransactionType.EIP1559);
+        .type(MainnetTransactionType.EIP1559);
   }
 
   protected abstract ExecutionContextTestFixture createExecutionContextTestFixture();
@@ -463,7 +463,7 @@ public abstract class AbstractTransactionPoolTestBase {
         .nonce(transactionNumber)
         .gasPrice(gasPrice)
         .gasLimit(blockGasLimit)
-        .type(TransactionType.FRONTIER)
+        .type(MainnetTransactionType.FRONTIER)
         .createTransaction(KEY_PAIR1);
   }
 
@@ -477,7 +477,7 @@ public abstract class AbstractTransactionPoolTestBase {
         .gasPrice(null)
         .maxFeePerGas(Optional.of(Wei.of(5000L)))
         .maxPriorityFeePerGas(Optional.of(Wei.of(1000L)))
-        .type(TransactionType.BLOB)
+        .type(MainnetTransactionType.BLOB)
         .blobsWithCommitments(Optional.of(blobTestFixture.createBlobsWithCommitments(6)))
         .createTransaction(KEY_PAIR1);
   }
@@ -490,7 +490,7 @@ public abstract class AbstractTransactionPoolTestBase {
         .gasPrice(null)
         .maxFeePerGas(Optional.of(Wei.of(5000L)))
         .maxPriorityFeePerGas(Optional.of(Wei.of(1000L)))
-        .type(TransactionType.BLOB)
+        .type(MainnetTransactionType.BLOB)
         .blobsWithCommitments(Optional.of(blobsWithCommitments))
         .createTransaction(KEY_PAIR1);
   }
@@ -506,7 +506,7 @@ public abstract class AbstractTransactionPoolTestBase {
         .maxFeePerGas(Optional.of(Wei.of(5000L * 10)))
         .maxPriorityFeePerGas(Optional.of(Wei.of(1000L * 10)))
         .maxFeePerBlobGas(Optional.of(Wei.of(5000L)))
-        .type(TransactionType.BLOB)
+        .type(MainnetTransactionType.BLOB)
         .blobsWithCommitments(Optional.of(blobTestFixture.createBlobsWithCommitments(6)))
         .createTransaction(KEY_PAIR1);
   }

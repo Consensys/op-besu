@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.privacy.PrivateTransaction;
@@ -47,7 +47,7 @@ public class RandomSigningPrivateMarkerTransactionFactoryTest {
 
     final Transaction unsignedPrivateMarkerTransaction =
         new Transaction.Builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(providedNonce)
             .gasPrice(gasPrice)
             .gasLimit(gasLimit)

@@ -15,7 +15,7 @@
 package org.hyperledger.besu.ethereum.eth.transactions.layered;
 
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.ethereum.core.MiningConfiguration;
 import org.hyperledger.besu.ethereum.eth.manager.EthScheduler;
 import org.hyperledger.besu.ethereum.eth.transactions.BlobCache;
@@ -166,7 +166,7 @@ public abstract class AbstractPrioritizedTransactions extends AbstractSequential
    */
   @Override
   protected int[] getRemainingPromotionsPerType() {
-    final var allTypes = TransactionType.values();
+    final var allTypes = MainnetTransactionType.values();
     final var remainingPromotionsPerType = new int[allTypes.length];
     for (int i = 0; i < allTypes.length; i++) {
       remainingPromotionsPerType[i] =

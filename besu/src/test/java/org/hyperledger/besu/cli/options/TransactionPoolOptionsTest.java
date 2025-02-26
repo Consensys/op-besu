@@ -21,7 +21,7 @@ import static org.hyperledger.besu.ethereum.eth.transactions.TransactionPoolConf
 
 import org.hyperledger.besu.cli.converter.DurationMillisConverter;
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.eth.transactions.ImmutableTransactionPoolConfiguration;
 import org.hyperledger.besu.ethereum.eth.transactions.TransactionPoolConfiguration;
@@ -378,9 +378,10 @@ public class TransactionPoolOptionsTest
     final int maxFrontier = 200;
     internalTestSuccess(
         config -> {
-          assertThat(config.getMaxPrioritizedTransactionsByType().get(TransactionType.BLOB))
+          assertThat(config.getMaxPrioritizedTransactionsByType().get(MainnetTransactionType.BLOB))
               .isEqualTo(maxBlobs);
-          assertThat(config.getMaxPrioritizedTransactionsByType().get(TransactionType.FRONTIER))
+          assertThat(
+                  config.getMaxPrioritizedTransactionsByType().get(MainnetTransactionType.FRONTIER))
               .isEqualTo(maxFrontier);
         },
         "--tx-pool-max-prioritized-by-type",
@@ -401,9 +402,10 @@ public class TransactionPoolOptionsTest
                 maxBlobs, maxFrontier));
     internalTestSuccess(
         config -> {
-          assertThat(config.getMaxPrioritizedTransactionsByType().get(TransactionType.BLOB))
+          assertThat(config.getMaxPrioritizedTransactionsByType().get(MainnetTransactionType.BLOB))
               .isEqualTo(maxBlobs);
-          assertThat(config.getMaxPrioritizedTransactionsByType().get(TransactionType.FRONTIER))
+          assertThat(
+                  config.getMaxPrioritizedTransactionsByType().get(MainnetTransactionType.FRONTIER))
               .isEqualTo(maxFrontier);
         },
         "--config-file",

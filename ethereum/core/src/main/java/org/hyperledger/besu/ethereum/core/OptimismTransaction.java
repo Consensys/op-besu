@@ -20,6 +20,7 @@ import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.CodeDelegation;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.OptimismTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -176,8 +177,10 @@ public class OptimismTransaction extends Transaction
 
     @Override
     public Builder guessType() {
-      if (sourceHash != null || transactionType == TransactionType.OPTIMISM_DEPOSIT) {
-        transactionType = TransactionType.OPTIMISM_DEPOSIT;
+      if (sourceHash != null
+          || OptimismTransactionType.OPTIMISM_DEPOSIT.getTypeValue()
+              == transactionType.getTypeValue()) {
+        transactionType = OptimismTransactionType.OPTIMISM_DEPOSIT;
       }
       super.guessType();
       return this;
@@ -187,7 +190,8 @@ public class OptimismTransaction extends Transaction
     public OptimismTransaction build() {
       if (transactionType == null) guessType();
 
-      if (transactionType != TransactionType.OPTIMISM_DEPOSIT) {
+      if (OptimismTransactionType.OPTIMISM_DEPOSIT.getTypeValue()
+          != transactionType.getTypeValue()) {
         return (OptimismTransaction) super.build();
       }
       return new OptimismTransaction(

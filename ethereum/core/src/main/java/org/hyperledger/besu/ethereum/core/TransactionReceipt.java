@@ -15,6 +15,7 @@
 package org.hyperledger.besu.ethereum.core;
 
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.mainnet.TransactionReceiptType;
 import org.hyperledger.besu.ethereum.rlp.BytesValueRLPInput;
@@ -72,7 +73,7 @@ public class TransactionReceipt implements org.hyperledger.besu.plugin.data.Tran
       final List<Log> logs,
       final Optional<Bytes> revertReason) {
     this(
-        TransactionType.FRONTIER,
+        MainnetTransactionType.FRONTIER,
         stateRoot,
         NONEXISTENT,
         cumulativeGasUsed,
@@ -112,7 +113,7 @@ public class TransactionReceipt implements org.hyperledger.besu.plugin.data.Tran
       final List<Log> logs,
       final Optional<Bytes> revertReason) {
     this(
-        TransactionType.FRONTIER,
+        MainnetTransactionType.FRONTIER,
         null,
         status,
         cumulativeGasUsed,
@@ -180,7 +181,7 @@ public class TransactionReceipt implements org.hyperledger.besu.plugin.data.Tran
 
   @VisibleForTesting
   void writeTo(final RLPOutput rlpOutput, final boolean withRevertReason, final boolean compacted) {
-    if (transactionType.equals(TransactionType.FRONTIER)) {
+    if (MainnetTransactionType.FRONTIER.getTypeValue() == transactionType.getTypeValue()) {
       writeToForReceiptTrie(rlpOutput, withRevertReason, compacted);
     } else {
       rlpOutput.writeBytes(
@@ -190,7 +191,7 @@ public class TransactionReceipt implements org.hyperledger.besu.plugin.data.Tran
 
   public void writeToForReceiptTrie(
       final RLPOutput rlpOutput, final boolean withRevertReason, final boolean compacted) {
-    if (!transactionType.equals(TransactionType.FRONTIER)) {
+    if (MainnetTransactionType.FRONTIER.getTypeValue() != transactionType.getTypeValue()) {
       rlpOutput.writeIntScalar(transactionType.getSerializedType());
     }
 
@@ -234,10 +235,10 @@ public class TransactionReceipt implements org.hyperledger.besu.plugin.data.Tran
   public static TransactionReceipt readFrom(
       final RLPInput rlpInput, final boolean revertReasonAllowed) {
     RLPInput input = rlpInput;
-    TransactionType transactionType = TransactionType.FRONTIER;
+    TransactionType transactionType = MainnetTransactionType.FRONTIER;
     if (!rlpInput.nextIsList()) {
       final Bytes typedTransactionReceiptBytes = input.readBytes();
-      transactionType = TransactionType.of(typedTransactionReceiptBytes.get(0));
+      transactionType = MainnetTransactionType.of(typedTransactionReceiptBytes.get(0));
       input = new BytesValueRLPInput(typedTransactionReceiptBytes.slice(1), false);
     }
 

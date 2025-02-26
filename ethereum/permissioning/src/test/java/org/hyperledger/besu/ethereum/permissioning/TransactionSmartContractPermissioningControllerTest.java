@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import org.hyperledger.besu.config.GenesisConfigFile;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.chain.GenesisState;
 import org.hyperledger.besu.ethereum.chain.MutableBlockchain;
@@ -97,7 +97,7 @@ public class TransactionSmartContractPermissioningControllerTest {
 
   private Transaction transactionForAccount(final Address address) {
     return Transaction.builder()
-        .type(TransactionType.FRONTIER)
+        .type(MainnetTransactionType.FRONTIER)
         .sender(address)
         .value(Wei.ZERO)
         .gasPrice(Wei.ZERO)

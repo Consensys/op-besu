@@ -14,9 +14,16 @@
  */
 package org.hyperledger.besu.ethereum.eth.transactions;
 
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.ACCESS_LIST;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.BLOB;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.DELEGATE_CODE;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.EIP1559;
+import static org.hyperledger.besu.datatypes.MainnetTransactionType.FRONTIER;
+
 import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 
@@ -148,26 +155,31 @@ public abstract class PendingTransaction
   public abstract PendingTransaction detachedCopy();
 
   private int computeMemorySize() {
-    return switch (transaction.getType()) {
-          case FRONTIER -> computeFrontierMemorySize();
-          case ACCESS_LIST -> computeAccessListMemorySize();
-          case EIP1559 -> computeEIP1559MemorySize();
-          case BLOB -> computeBlobMemorySize();
-          case DELEGATE_CODE -> computeSetCodeMemorySize();
-          case OPTIMISM_DEPOSIT -> computeOpDepositMemorySize();
-        }
-        + PENDING_TRANSACTION_MEMORY_SIZE;
+    final TransactionType transactionType = transaction.getType();
+    int memorySize = PENDING_TRANSACTION_MEMORY_SIZE;
+    if (FRONTIER.getTypeValue() == transactionType.getTypeValue()) {
+      memorySize += computeFrontierMemorySize();
+    } else if (ACCESS_LIST.getTypeValue() == transactionType.getTypeValue()) {
+      memorySize += computeAccessListMemorySize();
+    } else if (EIP1559.getTypeValue() == transactionType.getTypeValue()) {
+      memorySize += computeEIP1559MemorySize();
+    } else if (BLOB.getTypeValue() == transactionType.getTypeValue()) {
+      memorySize += computeBlobMemorySize();
+    } else if (DELEGATE_CODE.getTypeValue() == transactionType.getTypeValue()) {
+      memorySize += computeSetCodeMemorySize();
+    }
+    return memorySize;
   }
 
-  /** correct memory size for OptimismDeposit transactions. */
-  private int computeOpDepositMemorySize() {
-    return DEPOSIT_SIZE
-        + computePayloadMemorySize()
-        + computeToMemorySize()
-        + SOURCE_HASH_SIZE
-        + IS_SYSTEM_TX_SIZE
-        + MINT_SIZE;
-  }
+  //  /** correct memory size for OptimismDeposit transactions. */
+  //  private int computeOpDepositMemorySize() {
+  //    return DEPOSIT_SIZE
+  //        + computePayloadMemorySize()
+  //        + computeToMemorySize()
+  //        + SOURCE_HASH_SIZE
+  //        + IS_SYSTEM_TX_SIZE
+  //        + MINT_SIZE;
+  //  }
 
   private int computeFrontierMemorySize() {
     return FRONTIER_AND_ACCESS_LIST_SHALLOW_MEMORY_SIZE

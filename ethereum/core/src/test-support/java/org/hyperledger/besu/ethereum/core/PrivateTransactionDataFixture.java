@@ -23,7 +23,7 @@ import org.hyperledger.besu.crypto.SignatureAlgorithm;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.enclave.types.ReceiveResponse;
 import org.hyperledger.besu.ethereum.privacy.PrivateTransaction;
@@ -101,7 +101,7 @@ public class PrivateTransactionDataFixture {
   private static Transaction privateMarkerTransaction(
       final Bytes transactionKey, final Address precompiledContractAddress) {
     return Transaction.builder()
-        .type(TransactionType.FRONTIER)
+        .type(MainnetTransactionType.FRONTIER)
         .nonce(DEFAULT_NONCE)
         .gasPrice(DEFAULT_GAS_PRICE)
         .gasLimit(DEFAULT_GAS_LIMIT)

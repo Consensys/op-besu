@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Block;
 import org.hyperledger.besu.ethereum.core.BlockBody;
@@ -72,7 +72,7 @@ public class BaseFeeBlockBodyValidatorTest {
                     new TransactionTestFixture()
                         .maxFeePerGas(Optional.of(Wei.of(10L)))
                         .maxPriorityFeePerGas(Optional.of(Wei.of(1L)))
-                        .type(TransactionType.EIP1559)
+                        .type(MainnetTransactionType.EIP1559)
                         .createTransaction(keyPair),
                     // frontier transaction
                     new TransactionTestFixture().gasPrice(Wei.of(10L)).createTransaction(keyPair)),
@@ -106,7 +106,7 @@ public class BaseFeeBlockBodyValidatorTest {
                     new TransactionTestFixture()
                         .maxFeePerGas(Optional.of(Wei.of(1L)))
                         .maxPriorityFeePerGas(Optional.of(Wei.of(10L)))
-                        .type(TransactionType.EIP1559)
+                        .type(MainnetTransactionType.EIP1559)
                         .createTransaction(keyPair)),
                 Collections.emptyList()));
 

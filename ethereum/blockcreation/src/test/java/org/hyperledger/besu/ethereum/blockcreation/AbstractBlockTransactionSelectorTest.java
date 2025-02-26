@@ -38,6 +38,7 @@ import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.PendingTransaction;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
@@ -1336,7 +1337,7 @@ public abstract class AbstractBlockTransactionSelectorTest {
       final Wei maxPriorityFeePerGas,
       final long gasLimit) {
     return Transaction.builder()
-        .type(TransactionType.EIP1559)
+        .type(MainnetTransactionType.EIP1559)
         .gasLimit(gasLimit)
         .maxFeePerGas(maxFeePerGas)
         .maxPriorityFeePerGas(maxPriorityFeePerGas)

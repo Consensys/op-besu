@@ -29,6 +29,7 @@ import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.CodeDelegation;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -154,7 +155,7 @@ public class T8nExecutor {
             BigInteger chainId =
                 Bytes.fromHexStringLenient(txNode.get("chainId").textValue())
                     .toUnsignedBigInteger();
-            TransactionType transactionType = TransactionType.of(type == 0 ? 0xf8 : type);
+            TransactionType transactionType = MainnetTransactionType.of(type == 0 ? 0xf8 : type);
             builder.type(transactionType);
             builder.nonce(Bytes.fromHexStringLenient(txNode.get("nonce").textValue()).toLong());
             builder.gasLimit(Bytes.fromHexStringLenient(txNode.get("gas").textValue()).toLong());
@@ -285,7 +286,7 @@ public class T8nExecutor {
 
               transactions.add(builder.signAndBuild(keys));
             } else {
-              if (transactionType == TransactionType.FRONTIER) {
+              if (transactionType == MainnetTransactionType.FRONTIER) {
                 if (v.compareTo(REPLAY_PROTECTED_V_MIN) > 0) {
                   v =
                       v.subtract(REPLAY_PROTECTED_V_BASE)

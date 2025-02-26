@@ -25,7 +25,7 @@ import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobGas;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.GasLimitCalculator;
 import org.hyperledger.besu.ethereum.api.jsonrpc.internal.JsonRpcRequest;
@@ -241,7 +241,7 @@ public class EthGetTransactionReceiptTest {
   public void shouldWorkFor1559Txs() {
     when(blockchainQueries.headBlockNumber()).thenReturn(1L);
     final Transaction transaction1559 =
-        new BlockDataGenerator().transaction(TransactionType.EIP1559);
+        new BlockDataGenerator().transaction(MainnetTransactionType.EIP1559);
     final Wei baseFee = Wei.ONE;
     final TransactionReceiptWithMetadata transactionReceiptWithMetadata =
         TransactionReceiptWithMetadata.create(
@@ -314,7 +314,7 @@ public class EthGetTransactionReceiptTest {
     when(block.getHeader()).thenReturn(header);
     when(block.getBody()).thenReturn(body);
     when(body.getTransactions())
-        .thenReturn(List.of(new BlockDataGenerator().transaction(TransactionType.BLOB)));
+        .thenReturn(List.of(new BlockDataGenerator().transaction(MainnetTransactionType.BLOB)));
     when(parentHeader.getExcessBlobGas()).thenReturn(Optional.of(BlobGas.of(1000)));
     when(blockchain.getBlockByHash(blockHash)).thenReturn(Optional.of(block));
     mockProtocolSpec(header);

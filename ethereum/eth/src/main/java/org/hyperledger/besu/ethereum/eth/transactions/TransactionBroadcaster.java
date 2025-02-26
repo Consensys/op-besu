@@ -14,9 +14,9 @@
  */
 package org.hyperledger.besu.ethereum.eth.transactions;
 
-import static org.hyperledger.besu.datatypes.TransactionType.BLOB;
 import static org.hyperledger.besu.ethereum.eth.transactions.PendingTransaction.toTransactionList;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.eth.manager.EthContext;
@@ -27,10 +27,10 @@ import org.hyperledger.besu.ethereum.eth.transactions.TransactionPool.Transactio
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -41,7 +41,8 @@ public class TransactionBroadcaster
     implements TransactionBatchAddedListener, PendingTransactionDroppedListener {
   private static final Logger LOG = LoggerFactory.getLogger(TransactionBroadcaster.class);
 
-  private static final EnumSet<TransactionType> ANNOUNCE_HASH_ONLY_TX_TYPES = EnumSet.of(BLOB);
+  private static final Set<TransactionType> ANNOUNCE_HASH_ONLY_TX_TYPES =
+      Set.of(MainnetTransactionType.BLOB);
 
   private static final Boolean HASH_ONLY_BROADCAST = Boolean.TRUE;
   private static final Boolean FULL_BROADCAST = Boolean.FALSE;

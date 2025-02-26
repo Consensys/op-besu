@@ -38,6 +38,7 @@ import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.Hash;
 import org.hyperledger.besu.datatypes.KZGCommitment;
 import org.hyperledger.besu.datatypes.KZGProof;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -114,7 +115,7 @@ public class MainnetTransactionValidatorTest {
         FeeMarket.legacy(),
         checkSignatureMalleability,
         chainId,
-        Set.of(TransactionType.FRONTIER),
+        Set.of(MainnetTransactionType.FRONTIER),
         Integer.MAX_VALUE);
   }
 
@@ -264,7 +265,7 @@ public class MainnetTransactionValidatorTest {
     assertThat(
             validator.validateForSender(
                 Transaction.builder()
-                    .type(TransactionType.EIP1559)
+                    .type(MainnetTransactionType.EIP1559)
                     .nonce(0)
                     .maxPriorityFeePerGas(Wei.of(5))
                     .maxFeePerGas(Wei.of(7))
@@ -290,13 +291,15 @@ public class MainnetTransactionValidatorTest {
             Optional.of(BigInteger.ONE),
             Set.of(
                 new TransactionType[] {
-                  TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559
+                  MainnetTransactionType.FRONTIER,
+                  MainnetTransactionType.ACCESS_LIST,
+                  MainnetTransactionType.EIP1559
                 }),
             Integer.MAX_VALUE);
 
     final Transaction transaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .nonce(0)
             .maxPriorityFeePerGas(Wei.of(7))
             .maxFeePerGas(Wei.of(4))
@@ -327,10 +330,10 @@ public class MainnetTransactionValidatorTest {
             Optional.of(BigInteger.ONE),
             Set.of(
                 new TransactionType[] {
-                  TransactionType.FRONTIER,
-                  TransactionType.ACCESS_LIST,
-                  TransactionType.EIP1559,
-                  TransactionType.BLOB
+                  MainnetTransactionType.FRONTIER,
+                  MainnetTransactionType.ACCESS_LIST,
+                  MainnetTransactionType.EIP1559,
+                  MainnetTransactionType.BLOB
                 }),
             Integer.MAX_VALUE);
 
@@ -340,7 +343,7 @@ public class MainnetTransactionValidatorTest {
     final Transaction transaction =
         new TransactionTestFixture()
             .to(Optional.of(Address.fromHexString("0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF")))
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(Optional.of(BigInteger.ONE))
             .maxFeePerGas(Optional.of(Wei.of(15)))
             .maxFeePerBlobGas(Optional.of(Wei.of(7)))
@@ -371,7 +374,7 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.legacy(),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER),
+            Set.of(MainnetTransactionType.FRONTIER),
             Integer.MAX_VALUE);
 
     final TransactionValidator eip1559Validator =
@@ -381,12 +384,12 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.london(0L),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559),
+            Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.EIP1559),
             Integer.MAX_VALUE);
 
     final Transaction transaction =
         new TransactionTestFixture()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxPriorityFeePerGas(Optional.of(Wei.of(3)))
             .maxFeePerGas(Optional.of(Wei.of(6)))
             .gasLimit(21000)
@@ -415,11 +418,11 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.london(0L),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559),
+            Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.EIP1559),
             Integer.MAX_VALUE);
     final Transaction transaction =
         new TransactionTestFixture()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxPriorityFeePerGas(Optional.of(Wei.of(1)))
             .maxFeePerGas(Optional.of(Wei.of(1)))
             .chainId(Optional.of(BigInteger.ONE))
@@ -440,11 +443,11 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.london(0L, zeroBaseFee),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559),
+            Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.EIP1559),
             Integer.MAX_VALUE);
     final Transaction transaction =
         new TransactionTestFixture()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .maxPriorityFeePerGas(Optional.of(Wei.ZERO))
             .maxFeePerGas(Optional.of(Wei.ZERO))
             .chainId(Optional.of(BigInteger.ONE))
@@ -465,13 +468,13 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.london(0L),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559),
+            Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.EIP1559),
             Integer.MAX_VALUE);
     final Transaction transaction =
         new TransactionTestFixture()
             .maxPriorityFeePerGas(Optional.of(Wei.of(1)))
             .maxFeePerGas(Optional.of(Wei.of(150000L)))
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(Optional.of(BigInteger.ONE))
             .createTransaction(senderKeys);
     final Optional<Wei> basefee = Optional.of(Wei.of(150000L));
@@ -491,13 +494,13 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.london(0L),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559),
+            Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.EIP1559),
             Integer.MAX_VALUE);
     final Transaction transaction =
         new TransactionTestFixture()
             .maxPriorityFeePerGas(Optional.of(Wei.of(1)))
             .maxFeePerGas(Optional.of(Wei.of(1)))
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(Optional.of(BigInteger.ONE))
             .createTransaction(senderKeys);
     when(gasCalculator.transactionIntrinsicGasCost(any(), anyBoolean())).thenReturn(50L);
@@ -520,7 +523,7 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.london(0L),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559),
+            Set.of(MainnetTransactionType.FRONTIER, MainnetTransactionType.EIP1559),
             0xc000);
 
     var bigPayload =
@@ -554,13 +557,16 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.cancun(0L, Optional.empty()),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559, TransactionType.BLOB),
+            Set.of(
+                MainnetTransactionType.FRONTIER,
+                MainnetTransactionType.EIP1559,
+                MainnetTransactionType.BLOB),
             0xc000);
 
     var blobTx =
         new TransactionTestFixture()
             .to(Optional.empty())
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(Optional.of(BigInteger.ONE))
             .maxFeePerGas(Optional.of(Wei.of(15)))
             .maxFeePerBlobGas(Optional.of(Wei.of(128)))
@@ -597,7 +603,10 @@ public class MainnetTransactionValidatorTest {
             FeeMarket.cancun(0L, Optional.empty()),
             false,
             Optional.of(BigInteger.ONE),
-            Set.of(TransactionType.FRONTIER, TransactionType.EIP1559, TransactionType.BLOB),
+            Set.of(
+                MainnetTransactionType.FRONTIER,
+                MainnetTransactionType.EIP1559,
+                MainnetTransactionType.BLOB),
             0xc000);
 
     BlobTestFixture blobTestFixture = new BlobTestFixture();
@@ -605,7 +614,7 @@ public class MainnetTransactionValidatorTest {
     var blobTx =
         new TransactionTestFixture()
             .to(Optional.of(Address.fromHexString("0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF")))
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(Optional.of(BigInteger.ONE))
             .maxFeePerGas(Optional.of(Wei.of(15)))
             .maxFeePerBlobGas(Optional.of(Wei.of(128)))

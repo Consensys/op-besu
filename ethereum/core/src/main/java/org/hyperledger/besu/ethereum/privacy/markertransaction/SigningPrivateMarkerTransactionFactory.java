@@ -15,7 +15,7 @@
 package org.hyperledger.besu.ethereum.privacy.markertransaction;
 
 import org.hyperledger.besu.crypto.KeyPair;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.rlp.BytesValueRLPOutput;
@@ -30,7 +30,7 @@ public class SigningPrivateMarkerTransactionFactory {
       final KeyPair signingKey) {
     final Transaction transaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(unsignedPrivateMarkerTransaction.getNonce())
             .gasPrice(
                 unsignedPrivateMarkerTransaction.getGasPrice().map(Wei::fromQuantity).orElse(null))

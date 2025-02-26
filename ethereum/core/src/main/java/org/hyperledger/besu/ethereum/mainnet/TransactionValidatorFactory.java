@@ -14,6 +14,7 @@
  */
 package org.hyperledger.besu.ethereum.mainnet;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.GasLimitCalculator;
 import org.hyperledger.besu.ethereum.core.PermissionTransactionFilter;
@@ -41,7 +42,7 @@ public class TransactionValidatorFactory {
         gasLimitCalculator,
         checkSignatureMalleability,
         chainId,
-        Set.of(TransactionType.FRONTIER));
+        Set.of(MainnetTransactionType.FRONTIER));
   }
 
   public TransactionValidatorFactory(

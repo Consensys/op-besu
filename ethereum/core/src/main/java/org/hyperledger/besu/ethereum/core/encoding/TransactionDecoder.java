@@ -14,6 +14,8 @@
  */
 package org.hyperledger.besu.ethereum.core.encoding;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
+import org.hyperledger.besu.datatypes.OptimismTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.rlp.RLP;
@@ -141,11 +143,15 @@ public class TransactionDecoder {
    *     to a valid transaction type, or an empty Optional if it does not
    */
   private static Optional<TransactionType> getTransactionType(final Bytes opaqueBytes) {
+    final byte transactionTypeByte = opaqueBytes.get(0);
     try {
-      byte transactionTypeByte = opaqueBytes.get(0);
-      return Optional.of(TransactionType.of(transactionTypeByte));
+      return Optional.of(MainnetTransactionType.of(transactionTypeByte));
     } catch (IllegalArgumentException ex) {
-      return Optional.empty();
+      try {
+        return Optional.of(OptimismTransactionType.of(transactionTypeByte));
+      } catch (IllegalArgumentException innerEx) {
+        return Optional.empty();
+      }
     }
   }
 

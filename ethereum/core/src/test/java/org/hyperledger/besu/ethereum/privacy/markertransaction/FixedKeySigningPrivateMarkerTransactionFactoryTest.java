@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.core.Util;
@@ -54,7 +54,7 @@ public class FixedKeySigningPrivateMarkerTransactionFactoryTest {
 
     final Transaction unsignedPrivateMarkerTransaction =
         new Transaction.Builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(providedNonce)
             .gasPrice(gasPrice)
             .gasLimit(gasLimit)

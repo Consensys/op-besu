@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.core.BlockDataGenerator;
 import org.hyperledger.besu.ethereum.core.Transaction;
@@ -289,7 +290,10 @@ class NewPooledTransactionHashesMessageProcessorTest {
                 "0x0000000000000000000000000000000000000000000000000000000000000003"));
     final List<Integer> sizes = List.of(1, 2, 3);
     final List<TransactionType> types =
-        List.of(TransactionType.FRONTIER, TransactionType.ACCESS_LIST, TransactionType.EIP1559);
+        List.of(
+            MainnetTransactionType.FRONTIER,
+            MainnetTransactionType.ACCESS_LIST,
+            MainnetTransactionType.EIP1559);
 
     final Bytes bytes = TransactionAnnouncementEncoder.encodeForEth68(types, sizes, hashes);
     assertThat(expected).isEqualTo(bytes.toHexString());
@@ -319,7 +323,7 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isEqualTo(
             Hash.fromHexString(
                 "0x0000000000000000000000000000000000000000000000000000000000000001"));
-    assertThat(frontier.getType()).hasValue(TransactionType.FRONTIER);
+    assertThat(frontier.getType()).hasValue(MainnetTransactionType.FRONTIER);
     assertThat(frontier.getSize()).hasValue(1L);
 
     final TransactionAnnouncement accessList = announcementList.get(1);
@@ -327,7 +331,7 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isEqualTo(
             Hash.fromHexString(
                 "0x0000000000000000000000000000000000000000000000000000000000000002"));
-    assertThat(accessList.getType()).hasValue(TransactionType.ACCESS_LIST);
+    assertThat(accessList.getType()).hasValue(MainnetTransactionType.ACCESS_LIST);
     assertThat(accessList.getSize()).hasValue(2L);
 
     final TransactionAnnouncement eip1559 = announcementList.get(2);
@@ -335,7 +339,7 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isEqualTo(
             Hash.fromHexString(
                 "0x0000000000000000000000000000000000000000000000000000000000000003"));
-    assertThat(eip1559.getType()).hasValue(TransactionType.EIP1559);
+    assertThat(eip1559.getType()).hasValue(MainnetTransactionType.EIP1559);
     assertThat(eip1559.getSize()).hasValue(3L);
   }
 
@@ -363,7 +367,7 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isEqualTo(
             Hash.fromHexString(
                 "0x0000000000000000000000000000000000000000000000000000000000000001"));
-    assertThat(frontier.getType()).hasValue(TransactionType.FRONTIER);
+    assertThat(frontier.getType()).hasValue(MainnetTransactionType.FRONTIER);
     assertThat(frontier.getSize()).hasValue(1L);
 
     final TransactionAnnouncement accessList = announcementList.get(1);
@@ -371,7 +375,7 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isEqualTo(
             Hash.fromHexString(
                 "0x0000000000000000000000000000000000000000000000000000000000000002"));
-    assertThat(accessList.getType()).hasValue(TransactionType.ACCESS_LIST);
+    assertThat(accessList.getType()).hasValue(MainnetTransactionType.ACCESS_LIST);
     assertThat(accessList.getSize()).hasValue(2L);
 
     final TransactionAnnouncement eip1559 = announcementList.get(2);
@@ -379,15 +383,15 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isEqualTo(
             Hash.fromHexString(
                 "0x0000000000000000000000000000000000000000000000000000000000000003"));
-    assertThat(eip1559.getType()).hasValue(TransactionType.EIP1559);
+    assertThat(eip1559.getType()).hasValue(MainnetTransactionType.EIP1559);
     assertThat(eip1559.getSize()).hasValue(3L);
   }
 
   @Test
   void shouldEncodeAndDecodeTransactionAnnouncement_Eth66() {
-    final Transaction t1 = generator.transaction(TransactionType.FRONTIER);
-    final Transaction t2 = generator.transaction(TransactionType.ACCESS_LIST);
-    final Transaction t3 = generator.transaction(TransactionType.EIP1559);
+    final Transaction t1 = generator.transaction(MainnetTransactionType.FRONTIER);
+    final Transaction t2 = generator.transaction(MainnetTransactionType.ACCESS_LIST);
+    final Transaction t3 = generator.transaction(MainnetTransactionType.EIP1559);
     final List<Transaction> list = List.of(t1, t2, t3);
     final Bytes bytes = getEncoder(EthProtocol.ETH66).encode(list);
 
@@ -404,9 +408,9 @@ class NewPooledTransactionHashesMessageProcessorTest {
 
   @Test
   void shouldEncodeAndDecodeTransactionAnnouncement_Eth68() {
-    final Transaction t1 = generator.transaction(TransactionType.FRONTIER);
-    final Transaction t2 = generator.transaction(TransactionType.ACCESS_LIST);
-    final Transaction t3 = generator.transaction(TransactionType.EIP1559);
+    final Transaction t1 = generator.transaction(MainnetTransactionType.FRONTIER);
+    final Transaction t2 = generator.transaction(MainnetTransactionType.ACCESS_LIST);
+    final Transaction t3 = generator.transaction(MainnetTransactionType.EIP1559);
 
     final List<Transaction> list = List.of(t1, t2, t3);
     final Bytes bytes = getEncoder(EthProtocol.ETH68).encode(list);
@@ -496,7 +500,7 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Hash cannot be null");
 
-    assertThatThrownBy(() -> new TransactionAnnouncement(null, TransactionType.EIP1559, 0L))
+    assertThatThrownBy(() -> new TransactionAnnouncement(null, MainnetTransactionType.EIP1559, 0L))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Hash cannot be null");
 
@@ -504,7 +508,8 @@ class NewPooledTransactionHashesMessageProcessorTest {
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Type cannot be null");
 
-    assertThatThrownBy(() -> new TransactionAnnouncement(hash, TransactionType.EIP1559, null))
+    assertThatThrownBy(
+            () -> new TransactionAnnouncement(hash, MainnetTransactionType.EIP1559, null))
         .isInstanceOf(NullPointerException.class)
         .hasMessage("Size cannot be null");
 

@@ -16,6 +16,7 @@ package org.hyperledger.besu.ethereum.core.encoding;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.ethereum.core.Transaction;
 import org.hyperledger.besu.ethereum.rlp.BytesValueRLPOutput;
@@ -78,7 +79,7 @@ public class TransactionEncoder {
   public static void encodeRLP(
       final TransactionType transactionType, final Bytes opaqueBytes, final RLPOutput rlpOutput) {
     checkNotNull(transactionType, "Transaction type was not specified.");
-    if (TransactionType.FRONTIER.equals(transactionType)) {
+    if (MainnetTransactionType.FRONTIER.getTypeValue() == transactionType.getTypeValue()) {
       rlpOutput.writeRaw(opaqueBytes);
     } else {
       rlpOutput.writeBytes(opaqueBytes);
@@ -95,7 +96,7 @@ public class TransactionEncoder {
   public static Bytes encodeOpaqueBytes(
       final Transaction transaction, final EncodingContext encodingContext) {
     final TransactionType transactionType = getTransactionType(transaction);
-    if (TransactionType.FRONTIER.equals(transactionType)) {
+    if (MainnetTransactionType.FRONTIER.getTypeValue() == transactionType.getTypeValue()) {
       return RLP.encode(rlpOutput -> FrontierTransactionEncoder.encode(transaction, rlpOutput));
     } else {
       final Encoder encoder = getEncoder(transactionType, encodingContext);

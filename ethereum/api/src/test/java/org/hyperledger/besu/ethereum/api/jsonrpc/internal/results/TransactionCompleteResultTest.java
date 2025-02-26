@@ -17,7 +17,7 @@ package org.hyperledger.besu.ethereum.api.jsonrpc.internal.results;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.api.query.TransactionWithMetadata;
 import org.hyperledger.besu.ethereum.core.BlockDataGenerator;
@@ -41,7 +41,7 @@ public class TransactionCompleteResultTest {
         new TransactionCompleteResult(
             new TransactionWithMetadata(
                 new TransactionTestFixture()
-                    .type(TransactionType.EIP1559)
+                    .type(MainnetTransactionType.EIP1559)
                     .maxFeePerGas(Optional.of(Wei.ONE))
                     .maxPriorityFeePerGas(Optional.of(Wei.ZERO))
                     .createTransaction(gen.generateKeyPair()),
@@ -57,7 +57,7 @@ public class TransactionCompleteResultTest {
   @Test
   public void eip1559TransactionFields() {
     final BlockDataGenerator gen = new BlockDataGenerator();
-    final Transaction transaction = gen.transaction(TransactionType.EIP1559);
+    final Transaction transaction = gen.transaction(MainnetTransactionType.EIP1559);
     TransactionCompleteResult tcr =
         new TransactionCompleteResult(
             new TransactionWithMetadata(transaction, 0L, Optional.of(Wei.of(7L)), Hash.ZERO, 0));
@@ -71,7 +71,7 @@ public class TransactionCompleteResultTest {
   @Test
   public void legacyTransactionPostLondonFields() {
     final BlockDataGenerator gen = new BlockDataGenerator();
-    final Transaction transaction = gen.transaction(TransactionType.FRONTIER);
+    final Transaction transaction = gen.transaction(MainnetTransactionType.FRONTIER);
     TransactionCompleteResult tcr =
         new TransactionCompleteResult(
             new TransactionWithMetadata(transaction, 0L, Optional.of(Wei.of(7L)), Hash.ZERO, 0));
@@ -85,7 +85,7 @@ public class TransactionCompleteResultTest {
   @Test
   public void legacyTransactionPreLondonFields() {
     final BlockDataGenerator gen = new BlockDataGenerator();
-    final Transaction transaction = gen.transaction(TransactionType.FRONTIER);
+    final Transaction transaction = gen.transaction(MainnetTransactionType.FRONTIER);
     TransactionCompleteResult tcr =
         new TransactionCompleteResult(
             new TransactionWithMetadata(transaction, 0L, Optional.empty(), Hash.ZERO, 0));
@@ -99,7 +99,7 @@ public class TransactionCompleteResultTest {
   @Test
   public void accessListTransactionFields() {
     final BlockDataGenerator gen = new BlockDataGenerator();
-    final Transaction transaction = gen.transaction(TransactionType.ACCESS_LIST);
+    final Transaction transaction = gen.transaction(MainnetTransactionType.ACCESS_LIST);
     final TransactionCompleteResult transactionCompleteResult =
         new TransactionCompleteResult(
             new TransactionWithMetadata(

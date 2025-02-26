@@ -15,7 +15,7 @@
 package org.hyperledger.besu.tests.acceptance.dsl.transaction.account;
 
 import org.hyperledger.besu.crypto.SignatureAlgorithm;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.tests.acceptance.dsl.account.Account;
 import org.hyperledger.besu.tests.acceptance.dsl.account.Accounts;
 import org.hyperledger.besu.tests.acceptance.dsl.blockchain.Amount;
@@ -133,7 +133,7 @@ public class AccountTransactions {
         .recipient(recipient)
         .amount(amount)
         .gasPrice(DEFAULT_GAS_PRICE)
-        .transactionType(TransactionType.FRONTIER);
+        .transactionType(MainnetTransactionType.FRONTIER);
   }
 
   private TransferTransactionBuilder create1559Builder(
@@ -144,6 +144,6 @@ public class AccountTransactions {
         .amount(amount)
         .gasPrice(DEFAULT_GAS_PRICE)
         .chainId(chainId)
-        .transactionType(TransactionType.EIP1559);
+        .transactionType(MainnetTransactionType.EIP1559);
   }
 }

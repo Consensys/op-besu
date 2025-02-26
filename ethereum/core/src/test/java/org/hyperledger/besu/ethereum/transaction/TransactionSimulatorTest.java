@@ -32,7 +32,7 @@ import org.hyperledger.besu.datatypes.AccountOverride;
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.GasLimitCalculator;
 import org.hyperledger.besu.ethereum.chain.Blockchain;
@@ -170,7 +170,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(callParameter.getGasPrice())
             .gasLimit(blockHeader.getGasLimit())
@@ -200,7 +200,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(blockHeader.getGasLimit())
@@ -238,7 +238,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(Wei.ZERO)
             .gasLimit(blockHeader.getGasLimit())
@@ -271,7 +271,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(TRANSFER_GAS_LIMIT)
@@ -307,7 +307,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(callParameter.getGasPrice())
             .gasLimit(blockHeader.getGasLimit())
@@ -341,7 +341,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(TRANSFER_GAS_LIMIT)
@@ -376,7 +376,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(Wei.ZERO)
             .gasLimit(0L)
@@ -405,7 +405,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(0L)
             .gasPrice(Wei.ZERO)
             .gasLimit(0L)
@@ -434,7 +434,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(callParameter.getGasPrice())
             .gasLimit(blockHeader.getGasLimit())
@@ -475,7 +475,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(callParameter.getGasPrice())
             .gasLimit(blockHeader.getGasLimit())
@@ -506,7 +506,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(Wei.ZERO)
             .gasLimit(0L)
@@ -535,7 +535,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(0L)
             .gasPrice(Wei.ZERO)
             .gasLimit(0L)
@@ -564,7 +564,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(callParameter.getGasPrice())
             .gasLimit(blockHeader.getGasLimit())
@@ -594,7 +594,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(blockHeader.getGasLimit())
@@ -627,7 +627,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(GAS_CAP)
@@ -662,7 +662,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(GAS_CAP / 2)
@@ -699,7 +699,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(callParameter.getGasLimit())
@@ -733,7 +733,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(callParameter.getGasLimit())
@@ -773,7 +773,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(BigInteger.ONE)
             .nonce(1L)
             .gasLimit(callParameter.getGasLimit())
@@ -974,7 +974,7 @@ public class TransactionSimulatorTest {
 
     final Transaction expectedTransaction =
         Transaction.builder()
-            .type(TransactionType.FRONTIER)
+            .type(MainnetTransactionType.FRONTIER)
             .nonce(1L)
             .gasPrice(callParameter.getGasPrice())
             .gasLimit(blockHeader.getGasLimit())

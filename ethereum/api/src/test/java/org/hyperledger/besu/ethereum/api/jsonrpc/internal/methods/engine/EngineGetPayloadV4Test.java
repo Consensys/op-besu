@@ -28,8 +28,8 @@ import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.BlobGas;
 import org.hyperledger.besu.datatypes.BlobsWithCommitments;
 import org.hyperledger.besu.datatypes.Hash;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.RequestType;
-import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.api.jsonrpc.RpcMethod;
 import org.hyperledger.besu.ethereum.api.jsonrpc.internal.response.JsonRpcErrorResponse;
@@ -118,7 +118,7 @@ public class EngineGetPayloadV4Test extends AbstractEngineGetPayloadTest {
     Transaction blobTx =
         new TransactionTestFixture()
             .to(Optional.of(Address.fromHexString("0xDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF")))
-            .type(TransactionType.BLOB)
+            .type(MainnetTransactionType.BLOB)
             .chainId(Optional.of(BigInteger.ONE))
             .maxFeePerGas(Optional.of(Wei.of(15)))
             .maxFeePerBlobGas(Optional.of(Wei.of(128)))

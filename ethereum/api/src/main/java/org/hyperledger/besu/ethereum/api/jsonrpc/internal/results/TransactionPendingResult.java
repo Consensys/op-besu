@@ -16,6 +16,7 @@ package org.hyperledger.besu.ethereum.api.jsonrpc.internal.results;
 
 import org.hyperledger.besu.datatypes.AccessListEntry;
 import org.hyperledger.besu.datatypes.Address;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.TransactionType;
 import org.hyperledger.besu.datatypes.VersionedHash;
 import org.hyperledger.besu.datatypes.Wei;
@@ -106,7 +107,7 @@ public class TransactionPendingResult implements TransactionResult {
         TransactionEncoder.encodeOpaqueBytes(transaction, EncodingContext.POOLED_TRANSACTION)
             .toString();
     this.to = transaction.getTo().map(Address::toHexString).orElse(null);
-    if (transactionType == TransactionType.FRONTIER) {
+    if (transactionType == MainnetTransactionType.FRONTIER) {
       this.type = Quantity.create(0);
       this.yParity = null;
       this.v = Quantity.create(transaction.getV());
@@ -114,8 +115,8 @@ public class TransactionPendingResult implements TransactionResult {
       this.type = Quantity.create(transactionType.getSerializedType());
       this.yParity = Quantity.create(transaction.getYParity());
       this.v =
-          (transactionType == TransactionType.ACCESS_LIST
-                  || transactionType == TransactionType.EIP1559)
+          (transactionType == MainnetTransactionType.ACCESS_LIST
+                  || transactionType == MainnetTransactionType.EIP1559)
               ? Quantity.create(transaction.getYParity())
               : null;
     }

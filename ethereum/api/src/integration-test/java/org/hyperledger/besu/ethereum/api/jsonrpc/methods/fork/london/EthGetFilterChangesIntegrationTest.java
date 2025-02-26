@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import org.hyperledger.besu.crypto.KeyPair;
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Address;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.ProtocolContext;
 import org.hyperledger.besu.ethereum.api.jsonrpc.internal.JsonRpcRequest;
@@ -306,7 +306,7 @@ public class EthGetFilterChangesIntegrationTest {
 
   private Transaction createTransaction(final int transactionNumber) {
     return Transaction.builder()
-        .type(TransactionType.FRONTIER)
+        .type(MainnetTransactionType.FRONTIER)
         .gasLimit(100)
         .gasPrice(Wei.ZERO)
         .nonce(0)

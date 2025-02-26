@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.hyperledger.besu.crypto.SignatureAlgorithmFactory;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.MainnetTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 
 import java.util.Collections;
@@ -55,19 +55,19 @@ public class BlockValueCalculatorTest {
         new TransactionTestFixture()
             .maxPriorityFeePerGas(Optional.of(Wei.of(1)))
             .maxFeePerGas(Optional.of(Wei.of(maxFee)))
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .createTransaction(SignatureAlgorithmFactory.getInstance().generateKeyPair());
     final Transaction tx2 =
         new TransactionTestFixture()
             .maxPriorityFeePerGas(Optional.of(Wei.of(2)))
             .maxFeePerGas(Optional.of(Wei.of(maxFee)))
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .createTransaction(SignatureAlgorithmFactory.getInstance().generateKeyPair());
     final Transaction tx3 =
         new TransactionTestFixture()
             .maxPriorityFeePerGas(Optional.of(Wei.of(10)))
             .maxFeePerGas(Optional.of(Wei.of(maxFee)))
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .createTransaction(SignatureAlgorithmFactory.getInstance().generateKeyPair());
     final TransactionReceipt receipt1 =
         new TransactionReceipt(Hash.EMPTY_TRIE_HASH, 71, Collections.emptyList(), Optional.empty());
@@ -100,7 +100,7 @@ public class BlockValueCalculatorTest {
         new TransactionTestFixture()
             .maxPriorityFeePerGas(Optional.of(Wei.of(maxFee - baseFee)))
             .maxFeePerGas(Optional.of(Wei.of(maxFee)))
-            .type(TransactionType.EIP1559)
+            .type(MainnetTransactionType.EIP1559)
             .createTransaction(SignatureAlgorithmFactory.getInstance().generateKeyPair());
     final TransactionReceipt receipt1 =
         new TransactionReceipt(

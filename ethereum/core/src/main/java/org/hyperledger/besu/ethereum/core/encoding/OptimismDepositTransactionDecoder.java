@@ -16,7 +16,7 @@ package org.hyperledger.besu.ethereum.core.encoding;
 
 import org.hyperledger.besu.datatypes.Address;
 import org.hyperledger.besu.datatypes.Hash;
-import org.hyperledger.besu.datatypes.TransactionType;
+import org.hyperledger.besu.datatypes.OptimismTransactionType;
 import org.hyperledger.besu.datatypes.Wei;
 import org.hyperledger.besu.ethereum.core.OptimismTransaction;
 import org.hyperledger.besu.ethereum.rlp.RLPInput;
@@ -29,7 +29,7 @@ public class OptimismDepositTransactionDecoder {
     input.enterList();
     final OptimismTransaction.Builder builder =
         OptimismTransaction.builder()
-            .type(TransactionType.OPTIMISM_DEPOSIT)
+            .type(OptimismTransactionType.OPTIMISM_DEPOSIT)
             .sourceHash(Hash.wrap(input.readBytes32()))
             .sender(Address.wrap(input.readBytes()))
             .to(input.readBytes(v -> v.isEmpty() ? null : Address.wrap(v)))
