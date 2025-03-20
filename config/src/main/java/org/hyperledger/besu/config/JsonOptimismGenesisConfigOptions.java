@@ -14,7 +14,10 @@
  */
 package org.hyperledger.besu.config;
 
+import static java.util.Collections.emptyMap;
+
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalLong;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -23,6 +26,8 @@ import com.google.common.collect.ImmutableMap;
 /** Json impolementation of Optimism genesis config options. */
 public class JsonOptimismGenesisConfigOptions extends JsonGenesisConfigOptions
     implements OptimismGenesisConfigOptions {
+
+  private static final String TRANSITIONS_CONFIG_KEY = "transitions";
 
   private static final String OPTIMISM_CONFIG_KEY = "optimism";
 
@@ -38,6 +43,41 @@ public class JsonOptimismGenesisConfigOptions extends JsonGenesisConfigOptions
       final Map<String, String> configOverrides,
       final TransitionsConfigOptions transitionsConfig) {
     super(maybeConfig, configOverrides, transitionsConfig);
+  }
+
+  /**
+   * From json object json genesis config options.
+   *
+   * @param configRoot the config root
+   * @return the json genesis config options
+   */
+  public static JsonOptimismGenesisConfigOptions fromJsonObject(final ObjectNode configRoot) {
+    return JsonOptimismGenesisConfigOptions.fromJsonObjectWithOverrides(configRoot, emptyMap());
+  }
+
+  /**
+   * From json object with overrides json genesis config options.
+   *
+   * @param configRoot the config root
+   * @param configOverrides the config overrides
+   * @return the json genesis config options
+   */
+  static JsonOptimismGenesisConfigOptions fromJsonObjectWithOverrides(
+      final ObjectNode configRoot, final Map<String, String> configOverrides) {
+    final TransitionsConfigOptions transitionsConfigOptions;
+    transitionsConfigOptions = loadTransitionsFrom(configRoot);
+    return new JsonOptimismGenesisConfigOptions(
+        configRoot, configOverrides, transitionsConfigOptions);
+  }
+
+  private static TransitionsConfigOptions loadTransitionsFrom(final ObjectNode parentNode) {
+    final Optional<ObjectNode> transitionsNode =
+        JsonUtil.getObjectNode(parentNode, TRANSITIONS_CONFIG_KEY);
+    if (transitionsNode.isEmpty()) {
+      return new TransitionsConfigOptions(JsonUtil.createEmptyObjectNode());
+    }
+
+    return new TransitionsConfigOptions(transitionsNode.get());
   }
 
   @Override
@@ -254,6 +294,11 @@ public class JsonOptimismGenesisConfigOptions extends JsonGenesisConfigOptions
     if (isFixedBaseFee()) {
       builder.put("fixedBaseFee", true);
     }
+
+    if (getBlobScheduleOptions().isPresent()) {
+      builder.put("blobSchedule", getBlobScheduleOptions().get().asMap());
+    }
+
     if (isOptimism()) {
       builder.put("optimism", getOptimismConfigOptions().asMap());
     }
