@@ -47,6 +47,7 @@ public class JsonGenesisConfigOptions implements GenesisConfigOptions {
   private static final String TRANSITIONS_CONFIG_KEY = "transitions";
   private static final String DISCOVERY_CONFIG_KEY = "discovery";
   private static final String CHECKPOINT_CONFIG_KEY = "checkpoint";
+  private static final String BLOB_SCHEDULE_CONFIG_KEY = "blobschedule";
   private static final String ZERO_BASE_FEE_KEY = "zerobasefee";
   private static final String FIXED_BASE_FEE_KEY = "fixedbasefee";
   private static final String WITHDRAWAL_REQUEST_CONTRACT_ADDRESS_KEY =
@@ -71,7 +72,7 @@ public class JsonGenesisConfigOptions implements GenesisConfigOptions {
    * @param configRoot the config root
    * @return the json genesis config options
    */
-  public static JsonOptimismGenesisConfigOptions fromJsonObject(final ObjectNode configRoot) {
+  public static JsonGenesisConfigOptions fromJsonObject(final ObjectNode configRoot) {
     return fromJsonObjectWithOverrides(configRoot, emptyMap());
   }
 
@@ -82,12 +83,11 @@ public class JsonGenesisConfigOptions implements GenesisConfigOptions {
    * @param configOverrides the config overrides
    * @return the json genesis config options
    */
-  static JsonOptimismGenesisConfigOptions fromJsonObjectWithOverrides(
+  static JsonGenesisConfigOptions fromJsonObjectWithOverrides(
       final ObjectNode configRoot, final Map<String, String> configOverrides) {
     final TransitionsConfigOptions transitionsConfigOptions;
     transitionsConfigOptions = loadTransitionsFrom(configRoot);
-    return new JsonOptimismGenesisConfigOptions(
-        configRoot, configOverrides, transitionsConfigOptions);
+    return new JsonGenesisConfigOptions(configRoot, configOverrides, transitionsConfigOptions);
   }
 
   private static TransitionsConfigOptions loadTransitionsFrom(final ObjectNode parentNode) {
@@ -204,6 +204,12 @@ public class JsonGenesisConfigOptions implements GenesisConfigOptions {
     return JsonUtil.getObjectNode(configRoot, ETHASH_CONFIG_KEY)
         .map(EthashConfigOptions::new)
         .orElse(EthashConfigOptions.DEFAULT);
+  }
+
+  @Override
+  public Optional<BlobScheduleOptions> getBlobScheduleOptions() {
+    return JsonUtil.getObjectNode(configRoot, BLOB_SCHEDULE_CONFIG_KEY)
+        .map(BlobScheduleOptions::new);
   }
 
   @Override
@@ -542,6 +548,10 @@ public class JsonGenesisConfigOptions implements GenesisConfigOptions {
 
     if (isFixedBaseFee()) {
       builder.put("fixedBaseFee", true);
+    }
+
+    if (getBlobScheduleOptions().isPresent()) {
+      builder.put("blobSchedule", getBlobScheduleOptions().get().asMap());
     }
 
     return builder.build();
